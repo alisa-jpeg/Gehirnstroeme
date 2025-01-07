@@ -1,24 +1,24 @@
-import json
-import socket
+import json 
+import socket 
 
 # Konfiguration
-HOST = '127.0.0.1'  # Lokal laut GUI
+HOST = '127.0.0.1'  # Lokal laut GUI 
 PORT = 12345        # Port laut GUI
 BUFFER_SIZE = 1024
 
 # Durchschnittsberechnung
 def calculate_average_alpha():
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    udp_socket.bind((HOST, PORT))
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist bereit daten zu empfangen
+    udp_socket.bind((HOST, PORT)) 
 
-    alpha_values = []
+    alpha_values = [] # liste in der alle aufgenommenen daten gespeichert werden
 
     for _ in range(100):  # Empfange exakt 100 Pakete
-        data, _ = udp_socket.recvfrom(BUFFER_SIZE)
-        message = json.loads(data.decode('utf-8'))
+        data, _ = udp_socket.recvfrom(BUFFER_SIZE) # ist udp packet vom netzwerkstream und fängt daten auf 
+        message = json.loads(data.decode('utf-8')) # daten als json stream geliefert und in python objekt konvertiert
 
         # Alpha-Wert bei Index 2 hinzufügen
-        alpha_values.append(message["data"][2])
+        alpha_values.append(message["data"][2]) # gibt wert der liste zurük, nimmt zweiten index raus(nur alpha), bekommt packet und nimmt sich alphawert und fügt ihn am ende der liste hinzu
 
     udp_socket.close()
 
