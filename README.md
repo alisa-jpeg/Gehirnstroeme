@@ -1,6 +1,5 @@
 # Gehirnströme
--neuen udp stream starten (neuer socket kram) 
-
+-neuen udp stream starten (neuer socket kram) /n abc
 -empfangene wert mit durchschnitt vergleichen 
 
 -ab bestimmter differenz ein event triggern 
