@@ -17,8 +17,8 @@ def calculate_average_alpha():
 
     alpha_values = [] # liste in der alle aufgenommenen daten gespeichert werden
 
-    for _ in range(100):  # Empfange exakt 100 Pakete
-        data, _ = udp_socket.recvfrom(BUFFER_SIZE) # ist udp packet vom netzwerkstream und fängt daten auf 
+    for schleifenvariable in range(100):  # Empfange exakt 100 Pakete
+        data, schleifenvariable = udp_socket.recvfrom(BUFFER_SIZE) # ist udp packet vom netzwerkstream und fängt daten auf 
         message = json.loads(data.decode('utf-8')) # daten als json stream geliefert und in python objekt konvertiert
 
         # Alpha-Wert bei Index 2 hinzufügen
