@@ -1,0 +1,30 @@
+import json
+import socket
+
+# Konfiguration
+HOST = '127.0.0.1'  # Lokal laut GUI
+PORT = 12345        # Port laut GUI
+BUFFER_SIZE = 1024
+
+# Durchschnittsberechnung
+def calculate_average_alpha():
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    udp_socket.bind((HOST, PORT))
+
+    alpha_values = []
+
+    for _ in range(100):  # Empfange exakt 100 Pakete
+        data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+        message = json.loads(data.decode('utf-8'))
+
+        # Alpha-Wert bei Index 2 hinzufügen
+        alpha_values.append(message["data"][2])
+
+    udp_socket.close()
+
+    # Durchschnitt berechnen
+    return sum(alpha_values) / len(alpha_values)
+
+# Hauptprogramm
+alpha_average = calculate_average_alpha()
+print(f"Durchschnitt der Alpha-Werte: {alpha_average:.6f}")
