@@ -4,6 +4,23 @@
 
 import json 
 import socket 
+#importieren und initialisieren von pygame
+import pygame
+from pygame.locals import*
+pygame.init()
+
+#variablen/konstanten für pygame fenter setzen
+W, H = 800, 600
+FPS = 30
+SCHWARZ = (0,0,0)
+WEISS = (255, 255, 255)
+GRAU = (155, 155, 155)
+spielaktiv = True
+frame = 0
+
+#Öffnen neuen Fensters
+fenster = pygame.display.set_mode((W, H))
+clock = pygame.time.Clock()
 
 # Konfiguration
 HOST = '127.0.0.1'  # Lokal laut GUI 
@@ -32,3 +49,62 @@ def calculate_average_alpha():
 # Hauptprogramm
 alpha_average = calculate_average_alpha()
 print(f"Durchschnitt der Alpha-Werte: {alpha_average:.6f}")
+
+#zweiten datenstream empfangen, mit durchschnitt vergleichen und bilder anzeigen
+
+#bilder importieren
+
+ballon = ['','','']
+ballon[0] = pygame.image.load("bilder/Ballon1.png")
+ballon[1] = pygame.image.load("bilder/Ballon2.png")
+ballon[2] = pygame.image.load("bilder/Ballon3.png")
+
+while spelaktiv:
+    #überprüfen, ob NUtzer ein e Aktion durchgeführt hat
+    for event in pygme.event.get():
+        #Beenden bei [ESC] oder [X]
+        if event.type==QUIT or (event.type==KEDOWN and event.key==K_ESCAPE):
+            spielaktiv = false
+
+
+
+udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist bereit daten zu empfangen
+    udp_socket.bind((HOST, PORT)) 
+
+    alpha_values = [] # liste in der alle aufgenommenen daten gespeichert werden
+
+    for schleifenvariable in range(100):  # Empfange exakt 100 Pakete
+        data, schleifenvariable = udp_socket.recvfrom(BUFFER_SIZE) # ist udp packet vom netzwerkstream und fängt daten auf 
+        message = json.loads(data.decode('utf-8')) # daten als json stream geliefert und in python objekt konvertiert
+
+        # Alpha-Wert bei Index 2 hinzufügen
+        alpha_values.append(message["data"][2]) # gibt wert der liste zurük, nimmt zweiten index raus(nur alpha), bekommt packet und nimmt sich alphawert und fügt ihn am ende der liste hinzu
+
+        #"spiel" beginnt, also bilder werden angezeigt
+        while spelaktiv:
+            #überprüfen, ob NUtzer ein e Aktion durchgeführt hat
+               for event in pygme.event.get():
+                #Beenden bei [ESC] oder [X]
+                if event.type==QUIT or (event.type==KEDOWN and event.key==K_ESCAPE):
+                    spielaktiv = false
+            frame = 0
+            fenster.blit(biene[frame], (10, 10))
+            pygame.display.flip()
+            clock.tick(FPS)
+            if alpha_values > alpha_average*1.1:
+                frame = 1
+                fenster.blit(biene[frame], (10, 10))
+                pygame.display.flip()
+                clock.tick(FPS)
+            if alpha_values > alpha.average*1.2:
+                frame = 1
+                fenster.blit(biene[frame], (10, 10))
+                pygame.display.flip()
+                clock.tick(FPS)
+                
+
+            
+
+    udp_socket.close()
+
+
