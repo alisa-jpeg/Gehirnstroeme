@@ -6,7 +6,7 @@ import json
 import socket 
 #importieren und initialisieren von pygame
 import pygame
-from pygame.locals import*
+from pygame.locals import*.
 pygame.init()
 
 #variablen/konstanten für pygame fenter setzen
@@ -87,20 +87,24 @@ udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist berei
                 #Beenden bei [ESC] oder [X]
                 if event.type==QUIT or (event.type==KEDOWN and event.key==K_ESCAPE):
                     spielaktiv = false
+
             frame = 0 #frame o bedeutet, luftballon ist im normalzustand
             fenster.blit(biene[frame], (10, 10))
             pygame.display.flip()
             clock.tick(FPS)
+
             if alpha_values > alpha_average*1.1:
                 frame = 1 #frame 1 bedeutet, ballon ist nahe spikes
                 fenster.blit(biene[frame], (10, 10))
                 pygame.display.flip()
                 clock.tick(FPS)
+
             if alpha_values > alpha.average*1.2:
                 frame = 2 #frame 2 bedeutet, ballon ist zerplatzt
                 fenster.blit(biene[frame], (10, 10))
                 pygame.display.flip()
                 clock.tick(FPS)
+
 						if alpha_values<alpha.average:
 								frame = 0 #bedeutet, ballon ist im normalzustand=
                 fenster.blit(biene[frame], (10, 10))
