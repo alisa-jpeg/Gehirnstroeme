@@ -55,9 +55,9 @@ print(f"Durchschnitt der Alpha-Werte: {alpha_average:.6f}")
 #bilder importieren
 
 ballon = ['','','']
-ballon[0] = pygame.image.load("bilder/Ballon1.png")
-ballon[1] = pygame.image.load("bilder/Ballon2.png")
-ballon[2] = pygame.image.load("bilder/Ballon3.png")
+ballon[0] = pygame.image.load("bilder/Ballon1.jpeg")
+ballon[1] = pygame.image.load("bilder/Ballon2.jpeg")
+ballon[2] = pygame.image.load("bilder/Ballon3.jpeg")
 
 while spelaktiv:
     #überprüfen, ob NUtzer ein e Aktion durchgeführt hat
