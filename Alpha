@@ -101,8 +101,8 @@ udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist berei
                 fenster.blit(biene[frame], (10, 10))
                 pygame.display.flip()
                 clock.tick(FPS)
-					if alpha_values<alpha.average:
-							frame = 2
+						if alpha_values<alpha.average:
+								frame = 2
                 fenster.blit(biene[frame], (10, 10))
                 pygame.display.flip()
                 clock.tick(FPS)
