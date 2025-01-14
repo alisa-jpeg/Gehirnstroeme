@@ -1,1 +1,6 @@
-ab 
+#json message empfangen, dekodiert in python dictionary,
+#alpha wert aufgenommen/ rausgefilter + zur liste hinzugefügt, liste nach 10s abgebrochen, durschnitt ermittelt
+
+
+import json 
+import socket 
