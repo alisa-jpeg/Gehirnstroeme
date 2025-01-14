@@ -105,8 +105,8 @@ udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist berei
                 pygame.display.flip()
                 clock.tick(FPS)
 
-						if alpha_values<alpha.average:
-								frame = 0 #bedeutet, ballon ist im normalzustand=
+	if alpha_values<alpha.average:
+		frame = 0 #bedeutet, ballon ist im normalzustand=
                 fenster.blit(biene[frame], (10, 10))
                 pygame.display.flip()
                 clock.tick(FPS)
