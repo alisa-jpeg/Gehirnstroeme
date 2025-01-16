@@ -8,4 +8,5 @@
 danach:
 
 -kreis animieren -- alpha-wert bestimmt höhe des kreises -- auch mit pygame
+
 -später ballon
