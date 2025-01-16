@@ -82,8 +82,8 @@ udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist berei
 
         #"spiel" beginnt, also bilder werden angezeigt
         while spelaktiv:
-            #überprüfen, ob NUtzer ein e Aktion durchgeführt hat
-               for event in pygme.event.get():
+            #überprüfen, ob Nutzer eine Aktion durchgeführt hat
+               for event in pygame.event.get():
                 #Beenden bei [ESC] oder [X]
                 if event.type==QUIT or (event.type==KEDOWN and event.key==K_ESCAPE):
                     spielaktiv = false
