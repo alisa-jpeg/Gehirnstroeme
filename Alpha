@@ -15,7 +15,7 @@ FPS = 30
 SCHWARZ = (0,0,0)
 WEISS = (255, 255, 255)
 GRAU = (155, 155, 155)
-spielaktiv = True
+spielaktiv = true
 frame = 0
 
 #Öffnen neuen Fensters
