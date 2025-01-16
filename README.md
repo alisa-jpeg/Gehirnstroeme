@@ -10,4 +10,6 @@ danach:
 - kreis animieren -- alpha-wert bestimmt höhe des kreises -- auch mit pygame
 
 - später ballon
-- pakete werden each frame gesendet 
+- pakete werden each frame gesendet
+- erstmal bilder in pygame ausprobieren, dann in hauptprogramm einfügen
+- 
