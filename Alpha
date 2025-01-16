@@ -59,7 +59,7 @@ ballon[0] = pygame.image.load("Ballon1.jpeg")
 ballon[1] = pygame.image.load("Ballon2.jpeg")
 ballon[2] = pygame.image.load("Ballon3.jpeg")
 
-while spelaktiv:
+while spielaktiv:
     #überprüfen, ob NUtzer ein e Aktion durchgeführt hat
     for event in pygme.event.get():
         #Beenden bei [ESC] oder [X]
