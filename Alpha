@@ -6,7 +6,8 @@ import json
 import socket 
 #importieren und initialisieren von pygame
 import pygame
-from pygame.locals import*.
+import time
+from pygame.locals import*
 pygame.init()
 
 #variablen/konstanten für pygame fenter setzen
@@ -26,25 +27,40 @@ clock = pygame.time.Clock()
 HOST = '127.0.0.1'  # Lokal laut GUI 
 PORT = 12345        # Port laut GUI
 BUFFER_SIZE = 1024
+DURATION = 10
+MAX_PACKETS = 1000
 
-# Durchschnittsberechnung
+#Durchschnittsberechnung
 def calculate_average_alpha():
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist bereit daten zu empfangen
-    udp_socket.bind((HOST, PORT)) 
+    # Erstelle einen UDP-Socket, um Daten zu empfangen
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    alpha_values = [] # liste in der alle aufgenommenen daten gespeichert werden
+    # Binden des Sockets an die konfigurierte IP-Adresse und den Port
+    udp_socket.bind((HOST, PORT))
 
-    for schleifenvariable in range(100):  # Empfange exakt 100 Pakete
-        data, schleifenvariable = udp_socket.recvfrom(BUFFER_SIZE) # ist udp packet vom netzwerkstream und fängt daten auf 
-        message = json.loads(data.decode('utf-8')) # daten als json stream geliefert und in python objekt konvertiert
+    # Liste zum Speichern der empfangenen Alpha-Werte
+    alpha_values = []
 
-        # Alpha-Wert bei Index 2 hinzufügen
-        alpha_values.append(message["data"][2]) # gibt wert der liste zurük, nimmt zweiten index raus(nur alpha), bekommt packet und nimmt sich alphawert und fügt ihn am ende der liste hinzu
+    # Startzeit, um die Empfangsdauer zu überwachen
+    start_time = time.time()
 
+    # Schleife läuft, solange die Zeit innerhalb der konfigurierten Dauer ist + maximale Anzahl an Paketen nicht überschritten ist
+    while time.time() - start_time < DURATION and len(alpha_values) < MAX_PACKETS:
+        # Empfang eines Datenpakets
+        data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+
+        # Konvertieren der empfangenen JSON-Daten in ein Python-Dictionary
+        message = json.loads(data.decode('utf-8'))
+
+        # Extrahieren des Alpha-Werts (Index 2) aus den empfangenen Daten und speichere ihn
+        alpha_values.append(message["data"][2])
+
+    # Schließen des UDP-Socket, da er nicht mehr benötigt wird
     udp_socket.close()
 
-    # Durchschnitt berechnen
-    return sum(alpha_values) / len(alpha_values)
+    # Berechnen des Durchschnitts der Alpha-Werte und gib ihn zurück
+    # Falls keine Werte empfangen wurden, gib 0 zurück
+    return sum(alpha_values) / len(alpha_values) if alpha_values else 0
 
 # Hauptprogramm
 alpha_average = calculate_average_alpha()
@@ -59,61 +75,62 @@ ballon[0] = pygame.image.load("Ballon1.jpeg")
 ballon[1] = pygame.image.load("Ballon2.jpeg")
 ballon[2] = pygame.image.load("Ballon3.jpeg")
 
-while spelaktiv:
+while spielaktiv:
     #überprüfen, ob NUtzer ein e Aktion durchgeführt hat
-    for event in pygme.event.get():
+    for event in pygame.event.get():
         #Beenden bei [ESC] oder [X]
-        if event.type==QUIT or (event.type==KEDOWN and event.key==K_ESCAPE):
-            spielaktiv = false
+        if event.type==QUIT or (event.type==KEYDOWN and event.key==K_ESCAPE):
+            spielaktiv = False
 
 #neuer stream empfangen
 
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist bereit daten zu empfangen
-    udp_socket.bind((HOST, PORT)) 
+udp_socket.bind((HOST, PORT)) 
 
-    alpha_values = [] # liste in der alle aufgenommenen daten gespeichert werden
+alpha_values = [] # liste in der alle aufgenommenen daten gespeichert werden
 
-    for schleifenvariable in range(100):  # Empfange exakt 100 Pakete
-        data, schleifenvariable = udp_socket.recvfrom(BUFFER_SIZE) # ist udp packet vom netzwerkstream und fängt daten auf 
+for schleifenvariable in range(100):  # Empfange exakt 100 Pakete
+        data, _ = udp_socket.recvfrom(BUFFER_SIZE) # ist udp packet vom netzwerkstream und fängt daten auf 
         message = json.loads(data.decode('utf-8')) # daten als json stream geliefert und in python objekt konvertiert
 
         # Alpha-Wert bei Index 2 hinzufügen
         alpha_values.append(message["data"][2]) # gibt wert der liste zurük, nimmt zweiten index raus(nur alpha), bekommt packet und nimmt sich alphawert und fügt ihn am ende der liste hinzu
 
         #"spiel" beginnt, also bilder werden angezeigt
-        while spelaktiv:
+        while spielaktiv:
             #überprüfen, ob NUtzer ein e Aktion durchgeführt hat
-               for event in pygme.event.get():
+               for event in pygame.event.get():
                 #Beenden bei [ESC] oder [X]
-                if event.type==QUIT or (event.type==KEDOWN and event.key==K_ESCAPE):
-                    spielaktiv = false
+                if event.type==QUIT or (event.type==KEYDOWN and event.key==K_ESCAPE):
+                    spielaktiv = False
 
-            frame = 0 #frame o bedeutet, luftballon ist im normalzustand
-            fenster.blit(biene[frame], (10, 10))
-            pygame.display.flip()
-            clock.tick(FPS)
-
-            if alpha_values > alpha_average*1.1:
-                frame = 1 #frame 1 bedeutet, ballon ist nahe spikes
-                fenster.blit(biene[frame], (10, 10))
+                frame = 0 #frame o bedeutet, luftballon ist im normalzustand
+                fenster.blit(ballon[frame], (10, 10))
+                
                 pygame.display.flip()
                 clock.tick(FPS)
 
-            if alpha_values > alpha.average*1.2:
-                frame = 2 #frame 2 bedeutet, ballon ist zerplatzt
-                fenster.blit(biene[frame], (10, 10))
-                pygame.display.flip()
-                clock.tick(FPS)
+                if alpha_values > alpha_average*1.1:
+                    frame = 1 #frame 1 bedeutet, ballon ist nahe spikes
+                    fenster.blit(ballon[frame], (10, 10))
+                    pygame.display.flip()
+                    clock.tick(FPS)
 
-	if alpha_values<alpha.average:
-		frame = 0 #bedeutet, ballon ist im normalzustand=
-                fenster.blit(biene[frame], (10, 10))
-                pygame.display.flip()
-                clock.tick(FPS)
+                if alpha_values > alpha_average*1.2:
+                    frame = 2 #frame 2 bedeutet, ballon ist zerplatzt
+                    fenster.blit(ballon[frame], (10, 10))
+                    pygame.display.flip()
+                    clock.tick(FPS)
+
+                if alpha_values<alpha_average:
+                    frame = 0 #bedeutet, ballon ist im normalzustand=
+                    fenster.blit(ballon[frame], (10, 10))
+                    pygame.display.flip()
+                    clock.tick(FPS)
                 
 
             
 
-    udp_socket.close()
+        udp_socket.close()
 
 
