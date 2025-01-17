@@ -2,6 +2,7 @@
 #alpha wert aufgenommen/ rausgefilter + zur liste hinzugefügt, liste nach 10s abgebrochen, durschnitt ermittelt
 
 
+
 import json
 import socket
 import time
@@ -50,4 +51,4 @@ def calculate_average_alpha():
     alpha_average = calculate_average_alpha()
 
     # Ausgabe des berechneten Durchschnitts der Alpha-Werte
-    print(f"Durchschnitt der Alpha-Werte: {alpha_average:.6f}")
+    print(f"Durchschnitt der Alpha-Werte: {alpha_average:.6f}") # 6f= 6 Nachkommastellen 
