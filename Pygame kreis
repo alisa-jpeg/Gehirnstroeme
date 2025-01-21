@@ -1,0 +1,25 @@
+import pygame
+
+pygame.init()
+
+#screen erzeugen
+window_width = 800
+window_height = 600
+window = pygame.display.set_mode((window_width, window_height))
+
+#eventschleife
+running = True
+while running:
+  for event in pygame.event.get():
+    if event.type ==pygame.QUIT:
+      running = False
+# falls escape taste gedrückt - fenster geschlossen
+    elif event.type ==pygame.Keydon and event.key == pygame.K_ESCAPE:
+      running = False 
+
+window.fill((25, 25, 25))
+# position
+pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
+pygame.display.update()
+
+pygame.quit()
