@@ -7,6 +7,9 @@ window_width = 800
 window_height = 600
 window = pygame.display.set_mode((window_width, window_height))
 
+ballpostion_y= 30
+bewegung_y =3
+
 #eventschleife
 running = True
 while running:
@@ -18,8 +21,9 @@ while running:
       running = False 
 
 window.fill((25, 25, 25))
-# position
 pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
 pygame.display.update()
+
+ballposition_y= bewegung_y
 
 pygame.quit()
