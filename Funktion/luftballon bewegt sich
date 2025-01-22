@@ -37,6 +37,7 @@ def steigen(): #prozedur
                   fenster.blit(biene[frame], (10, 10))
                   pygame.display.flip()
                   clock.tick(FPS)
+		  break  #hier for-schleife abbrechen und udp stream dann beenden
 
 	  if alpha_values<alpha.average:
 	  	frame = 0 #bedeutet, ballon ist im normalzustand=
