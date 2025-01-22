@@ -2,8 +2,6 @@
 #alpha wert aufgenommen/ rausgefilter + zur liste hinzugefügt, liste nach 10s abgebrochen, durschnitt ermittelt
 
 
-
-
 # Konfiguration der Netzwerkparameter
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
 PORT = 12345        # Der Port, auf dem Daten empfangen werden sollen
