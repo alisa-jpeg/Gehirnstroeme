@@ -1,3 +1,5 @@
+#datenbank für fragen am anfang
+
 import sqlite3  # Modul zum Arbeiten mit SQLite-Datenbanken
 import customtkinter as ctk  # Modul für erweiterte Tkinter-GUIs
 
