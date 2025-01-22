@@ -1,7 +1,4 @@
 # Gehirnströme
-- funktion von beta in alpha importieren
-
-- duration, max_package runtertun anstatt schleifenvariable
 
 - drei events: normal (luftballon in mitte bildschirm, Spikes sind oben), angespannt (Luftballon in Nähe von Spikes), tot 
    (Liftballon an Spikes zerplatzt und udp stream wird beendet) -- noch zuende malen
