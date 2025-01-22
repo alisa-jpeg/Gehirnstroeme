@@ -1,15 +1,15 @@
 import pygame
 
 pygame.init()
-background = pygame.image.load("hintergrundbild.png")
+#background = pygame.image.load("hintergrundbild.png")
 
 #screen erzeugen
 window_width = 600
 window_height = 800
 window = pygame.display.set_mode((window_width, window_height))
 
-ballpostion_y= 30
-bewegung_y =3
+#ballpostion_y= 30
+#bewegung_y =3
 
 #eventschleife
 running = True
@@ -28,9 +28,9 @@ window.fill((0, 200, 0))
 pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
 pygame.display.update()
 
-ballposition_y += bewegung_y
+#ballposition_y += bewegung_y
 
-if ballposition_y>(600) or ballposition_y < 0:
-  bewegung_y = bewegung_y *-1 
+#if ballposition_y>(600) or ballposition_y < 0:
+ #bewegung_y = bewegung_y *-1 
 
 pygame.quit()
