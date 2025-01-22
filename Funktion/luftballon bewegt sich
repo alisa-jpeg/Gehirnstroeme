@@ -1,4 +1,4 @@
-def steigen: #prozedur
+def steigen(): #prozedur
     #neuer stream empfangen
 
   udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # socket ist bereit daten zu empfangen
