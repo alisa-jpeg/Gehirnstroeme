@@ -12,4 +12,6 @@ danach:
 - später ballon
 - pakete werden each frame gesendet
 - erstmal bilder in pygame ausprobieren, dann in hauptprogramm einfügen
-- 
+
+
+github in vsc
