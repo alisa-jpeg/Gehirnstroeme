@@ -14,7 +14,7 @@ danach:
 - erstmal bilder in pygame ausprobieren, dann in hauptprogramm einfügen
 
 
-github in vsc
+github in vsc. auch im web auf pcs in schule vscode.dev
 
 tippfehler in luftballon bewegt sich + duration rein
 
