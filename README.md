@@ -17,3 +17,9 @@ danach:
 github in vsc
 
 tippfehler in luftballon bewegt sich + duration rein
+
+pygame kreis einrückungsfehler
+
+import *funktion* mit underline
+
+
