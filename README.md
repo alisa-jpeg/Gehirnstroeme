@@ -16,4 +16,4 @@ danach:
 
 github in vsc
 
-tippfehler in luftballon bewegt sich
+tippfehler in luftballon bewegt sich + duration rein
