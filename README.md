@@ -10,13 +10,10 @@ danach:
 - kreis animieren -- alpha-wert bestimmt höhe des kreises -- auch mit pygame
 
 - später ballon
-- pakete werden each frame gesendet
-- erstmal bilder in pygame ausprobieren, dann in hauptprogramm einfügen
 
 
 github in vsc. auch im web auf pcs in schule vscode.dev -- das geht
 
-tippfehler in luftballon bewegt sich + duration rein
 
 pygame kreis einrückungsfehler
 
