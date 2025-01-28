@@ -1,50 +1,50 @@
 def ballon_bewegen():
-import pygame
-import calculate_average_alpha
-
-pygame.init()
-#background = pygame.image.load("hintergrundbild.png")
-
-#screen erzeugen
-window_width = 600
-window_height = 800
-window = pygame.display.set_mode((window_width, window_height))
-
-
-#bewegung 
-threshold = 50 # Schwellenwert
-speed = 2 # Geschwindigkeit der Bewegung
-direction = 0 #-1 für nach oben, 1 für nach 
-
-clock = pygame.time.Clock() geschwindigkeit regulieren
-running = True #
-#eventschleife
-while running:
-  for event in pygame.event.get():
-    if event.type ==pygame.QUIT:
-      running = False
-# falls escape taste gedrückt - fenster geschlossen
-
-    elif event.type ==pygame.Keydon and event.key == pygame.K_ESCAPE:
-      running = False 
-
-value = alpha_values() #wert aus durchscnittsrechnung abrufen
-max_y = base_y - (value*1,5) # je größer value, desto höher geht der kreis
-max_y = max(50, min(max_y, base_y)) #begrenzung zwischen 50 und base_y
-
-	if value > threshold:
-		direction == -1 and y max_y
-      y -= speed 
-  elif direction == 1 and y < base_y: #nach unten zur grundhöhe
-      y +=speed
-	if direction == -1 and y > 
-
-window.fill((0, 200, 0))
-
-
-pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
-pygame.display.update()
-
-clock.tick(30) #Schleife wird max 30x pro sekunde durchgelaufen -> kreis bewegt sich gleichmäßig
-pygame.display.flip() #bildschirm mit neuesten änderungen wird aktualisiert
-pygame.quit()
+	import pygame
+	import calculate_average_alpha
+	
+	pygame.init()
+	#background = pygame.image.load("hintergrundbild.png")
+	
+	#screen erzeugen
+	window_width = 600
+	window_height = 800
+	window = pygame.display.set_mode((window_width, window_height))
+	
+	
+	#bewegung 
+	threshold = 50 # Schwellenwert
+	speed = 2 # Geschwindigkeit der Bewegung
+	direction = 0 #-1 für nach oben, 1 für nach 
+	
+	clock = pygame.time.Clock() geschwindigkeit regulieren
+	running = True #
+	#eventschleife
+	while running:
+	  for event in pygame.event.get():
+	    if event.type ==pygame.QUIT:
+	      running = False
+	# falls escape taste gedrückt - fenster geschlossen
+	
+	    elif event.type ==pygame.Keydon and event.key == pygame.K_ESCAPE:
+	      running = False 
+	
+	value = alpha_values() #wert aus durchscnittsrechnung abrufen
+	max_y = base_y - (value*1,5) # je größer value, desto höher geht der kreis
+	max_y = max(50, min(max_y, base_y)) #begrenzung zwischen 50 und base_y
+	
+		if value > threshold:
+			direction == -1 and y max_y
+	      y -= speed 
+	  elif direction == 1 and y < base_y: #nach unten zur grundhöhe
+	      y +=speed
+		if direction == -1 and y > 
+	
+	window.fill((0, 200, 0))
+	
+	
+	pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
+	pygame.display.update()
+	
+	clock.tick(30) #Schleife wird max 30x pro sekunde durchgelaufen -> kreis bewegt sich gleichmäßig
+	pygame.display.flip() #bildschirm mit neuesten änderungen wird aktualisiert
+	pygame.quit()
