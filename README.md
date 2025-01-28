@@ -27,3 +27,5 @@ guthub video je person. nen branch erstellen nächstes mal zsm machen
 dateien am anfang klein und mit _ und ordentlich benennen
 
 
+zwischenpräsentation: 
+- 1 oberfläche mit 2 knöpfen
