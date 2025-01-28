@@ -15,8 +15,9 @@ threshold = 50 # Schwellenwert
 speed = 2 # Geschwindigkeit der Bewegung
 direction = 0 #-1 für nach oben, 1 für nach 
 
+clock = pygame.time.Clock() geschwindigkeit regulieren
+running = True #
 #eventschleife
-running = True
 while running:
   for event in pygame.event.get():
     if event.type ==pygame.QUIT:
@@ -43,7 +44,6 @@ window.fill((0, 200, 0))
 pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
 pygame.display.update()
 
-
-
-
+clock.tick(30) #Schleife wird max 30x pro sekunde durchgelaufen -> kreis bewegt sich gleichmäßig
+pygame.display.flip() #bildschirm mit neuesten änderungen wird aktualisiert
 pygame.quit()
