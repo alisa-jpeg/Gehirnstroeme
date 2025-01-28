@@ -1,3 +1,4 @@
+def ballon_bewegen():
 import pygame
 import calculate_average_alpha
 
