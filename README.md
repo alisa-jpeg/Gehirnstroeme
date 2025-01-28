@@ -19,10 +19,7 @@ pygame kreis einrückungsfehler
 
 import *funktion* mit underline
 
-guthub video je person. nen branch erstellen nächstes mal zsm machen
-
-dateien am anfang klein und mit _ und ordentlich benennen
-
+github video je person. nen branch erstellen nächstes mal zsm machen
 
 zwischenpräsentation: 
 - 1 oberfläche mit 2 knöpfen
