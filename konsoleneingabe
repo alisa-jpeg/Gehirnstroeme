@@ -1,4 +1,4 @@
-def konsoleneingabe
+def konsoleneingabe():
     import csv
     from datetime import datetime
     
