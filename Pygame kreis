@@ -1,4 +1,5 @@
 import pygame
+import calculate_average_alpha
 
 pygame.init()
 #background = pygame.image.load("hintergrundbild.png")
@@ -8,8 +9,12 @@ window_width = 600
 window_height = 800
 window = pygame.display.set_mode((window_width, window_height))
 
-#ballpostion_y= 30
-#bewegung_y =3
+
+#bewegung 
+threshold = 50 # Schwellenwert
+speed = 2 # Geschwindigkeit der Bewegung
+direction = 0 #-1 für nach oben, 1 für nach 
+
 
 #eventschleife
 running = True
@@ -22,15 +27,21 @@ n
     elif event.type ==pygame.Keydon and event.key == pygame.K_ESCAPE:
       running = False 
 
+value = alpha_values() #wert aus durchscnittsrechnung holen
+	if value > threshold:
+		direction = -1 #nach oben
+	else:
+		direction= 1 #nach unten zur grundhöhe
+
+	if direction == -1 and y > 
+
 window.fill((0, 200, 0))
 
 
 pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
 pygame.display.update()
 
-#ballposition_y += bewegung_y
 
-#if ballposition_y>(600) or ballposition_y < 0:
- #bewegung_y = bewegung_y *-1 
+
 
 pygame.quit()
