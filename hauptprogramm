@@ -4,4 +4,16 @@
 #nach ende des spiels auswertung anzeigen?
 
 #nötige dinge importieren
+import customtkinter as ctk #für oberfläche
+
+import csv      #für dateneingabe
+from datetime import datetime 
+
+import json    #für datenempfang
+import socket 
+
+import pygame    #für luftballon
+from pygame.locals import*.
+pygame.init()
+
 
