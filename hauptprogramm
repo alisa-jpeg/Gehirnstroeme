@@ -16,4 +16,11 @@ import pygame    #für luftballon
 from pygame.locals import*.
 pygame.init()
 
+#beginn hauptprogramm
+
+# Hauptfenster der Anwendung erstellen
+app = ctk.CTk()
+app.title("Brain-Computer-Interface mittels EEG")  # Titel des Fensters
+app.geometry("400x400")  # Größe des Fensters
+
 
