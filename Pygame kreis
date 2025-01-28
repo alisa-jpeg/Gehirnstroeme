@@ -15,24 +15,26 @@ threshold = 50 # Schwellenwert
 speed = 2 # Geschwindigkeit der Bewegung
 direction = 0 #-1 für nach oben, 1 für nach 
 
-
 #eventschleife
 running = True
 while running:
   for event in pygame.event.get():
     if event.type ==pygame.QUIT:
       running = False
-# falls escape taste gedrückt - fenster geschlosse
-n
+# falls escape taste gedrückt - fenster geschlossen
+
     elif event.type ==pygame.Keydon and event.key == pygame.K_ESCAPE:
       running = False 
 
-value = alpha_values() #wert aus durchscnittsrechnung holen
-	if value > threshold:
-		direction = -1 #nach oben
-	else:
-		direction= 1 #nach unten zur grundhöhe
+value = alpha_values() #wert aus durchscnittsrechnung abrufen
+max_y = base_y - (value*1,5) # je größer value, desto höher geht der kreis
+max_y = max(50, min(max_y, base_y)) #begrenzung zwischen 50 und base_y
 
+	if value > threshold:
+		direction == -1 and y max_y
+      y -= speed 
+  elif direction == 1 and y < base_y: #nach unten zur grundhöhe
+      y +=speed
 	if direction == -1 and y > 
 
 window.fill((0, 200, 0))
