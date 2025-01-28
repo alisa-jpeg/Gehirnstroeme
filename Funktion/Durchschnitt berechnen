@@ -19,7 +19,7 @@ def calculate_average_alpha():
     # Schleife läuft, solange die Zeit innerhalb der konfigurierten Dauer ist + maximale Anzahl an Paketen nicht überschritten ist
     while time.time() - start_time < DURATION and len(alpha_values) < MAX_PACKETS:
         # Empfang eines Datenpakets
-        data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+        data, schleifenvariable = udp_socket.recvfrom(BUFFER_SIZE)
 
         # Konvertieren der empfangenen JSON-Daten in ein Python-Dictionary
         message = json.loads(data.decode('utf-8'))
