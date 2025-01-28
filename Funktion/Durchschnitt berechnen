@@ -2,8 +2,6 @@
 #alpha wert aufgenommen/ rausgefilter + zur liste hinzugefügt, liste nach 10s abgebrochen, durschnitt ermittelt
 
 
-
-
 # Funktion zur Berechnung des Durchschnitts der Alpha-Werte
 def calculate_average_alpha():
     # Erstelle einen UDP-Socket, um Daten zu empfangen
