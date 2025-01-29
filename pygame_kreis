@@ -3,7 +3,7 @@ def ballon_bewegen():
 	import calculate_average_alpha
 	
 	pygame.init()
-	#background = pygame.image.load("hintergrundbild.png")
+	background = pygame.image.load("Hintergrundbild.png")
 	
 	#screen erzeugen
 	window_width = 600
