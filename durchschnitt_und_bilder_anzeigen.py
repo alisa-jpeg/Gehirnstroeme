@@ -1,13 +1,13 @@
 #json message empfangen, dekodiert in python dictionary,
 #alpha wert aufgenommen/ rausgefilter + zur liste hinzugefügt, liste nach 10s abgebrochen, durschnitt ermittelt
 
-
+#hallo
 import json 
 import socket 
 #importieren und initialisieren von pygame
 import pygame
 from pygame.locals import*.
-pygame.init()
+pygame.init();
 
 #variablen/konstanten für pygame fenter setzen
 W, H = 800, 600
