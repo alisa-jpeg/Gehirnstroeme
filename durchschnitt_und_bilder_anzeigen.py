@@ -1,13 +1,15 @@
 #json message empfangen, dekodiert in python dictionary,
 #alpha wert aufgenommen/ rausgefilter + zur liste hinzugefügt, liste nach 10s abgebrochen, durschnitt ermittelt
 
-#hallo
+
 import json 
 import socket 
 #importieren und initialisieren von pygame
 import pygame
-from pygame.locals import*.
-pygame.init();
+
+import calculate_average_alpha)
+
+pygame.init()
 
 #variablen/konstanten für pygame fenter setzen
 W, H = 800, 600
@@ -15,7 +17,7 @@ FPS = 30
 SCHWARZ = (0,0,0)
 WEISS = (255, 255, 255)
 GRAU = (155, 155, 155)
-spielaktiv = true
+spielaktiv = True
 frame = 0
 
 # Konfiguration der Netzwerkparameter
@@ -47,7 +49,7 @@ while spielaktiv:
     for event in pygme.event.get():
         #Beenden bei [ESC] oder [X]
         if event.type==QUIT or (event.type==KEDOWN and event.key==K_ESCAPE):
-            spielaktiv = false
+            spielaktiv = False
 
 #neuer stream empfangen
 
