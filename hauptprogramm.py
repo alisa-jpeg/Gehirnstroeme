@@ -14,7 +14,7 @@ import socket
 import time
 
 import pygame    #für luftballon
-from pygame.locals import*.
+from pygame.locals import*
 pygame.init()
 
 #funktionen importieren

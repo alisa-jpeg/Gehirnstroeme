@@ -1,6 +1,7 @@
 import json
 import socket
 import time
+import calculate_average_alpha()
 
 # Konfiguration der Netzwerkparameter
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht

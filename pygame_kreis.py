@@ -16,7 +16,7 @@ def ballon_bewegen():
 	speed = 2 # Geschwindigkeit der Bewegung
 	direction = 0 #-1 für nach oben, 1 für nach 
 	
-	clock = pygame.time.Clock() geschwindigkeit regulieren
+	clock = pygame.time.Clock() #geschwindigkeit regulieren
 	running = True #
 	#eventschleife
 	while running:
