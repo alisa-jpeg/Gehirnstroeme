@@ -21,7 +21,6 @@ def calculate_average_alpha():
 
     # Startzeit, um die Empfangsdauer zu überwachen
     start_time = time.time()
-    print("moin")
 
     # Schleife läuft, solange die Zeit innerhalb der konfigurierten Dauer ist + maximale Anzahl an Paketen nicht überschritten ist
     while time.time() - start_time < DURATION and len(alpha_values) < MAX_PACKETS:
@@ -33,12 +32,12 @@ def calculate_average_alpha():
 
         # Extrahieren des Alpha-Werts (Index 2) aus den empfangenen Daten und speichere ihn
         alpha_values.append(message["data"][2])
-        print(alpha_values)
 
     # Schließen des UDP-Socket, da er nicht mehr benötigt wird
     udp_socket.close()
 
     
+    print("moi")
 
     # Berechnen des Durchschnitts der Alpha-Werte und gib ihn zurück
     # Falls keine Werte empfangen wurden, gib 0 zurück
@@ -51,3 +50,4 @@ alpha_average = calculate_average_alpha()
 
     # Ausgabe des berechneten Durchschnitts der Alpha-Werte
 print(alpha_average)
+
