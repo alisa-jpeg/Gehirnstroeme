@@ -15,7 +15,9 @@ danach:
 github in vsc. auch im web auf pcs in schule vscode.dev -- das geht
 
 
-import *funktion* mit underline
+import *funktion* und from wo
+
+imports und time und so müssen zu funktionen nicht ins hauptprogramm
 
 github video je person. nen branch erstellen nächstes mal zsm machen
 
