@@ -4,30 +4,12 @@
 #nach ende des spiels auswertung anzeigen?
 
 #nötige dinge importieren
-import customtkinter as ctk #für oberfläche
-
-import csv      #für dateneingabe
-from datetime import datetime 
-
-import json    #für datenempfang
-import socket 
-import time
-
-import pygame    #für luftballon
-from pygame.locals import*
-pygame.init()
+import customtkinter as ctk #für graphiken 
 
 #funktionen importieren
 from durchschnitt_berechnen import calculate_average_alpha
 from konsoleneingabe import konsoleneingabe
 from pygame_kreis import ballon_bewegen
-
-# Konfiguration der Netzwerkparameter
-HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
-PORT = 12345        # Der Port, auf dem Daten empfangen werden sollen
-BUFFER_SIZE = 1024  # Die maximale Größe eines UDP-Datenpakets in Bytes
-DURATION = 10       # Die Dauer (in Sekunden), für die Daten empfangen werden
-MAX_PACKETS = 1000  # Die maximale Anzahl von Paketen, die verarbeitet werden
 
 
 #beginn hauptprogramm
