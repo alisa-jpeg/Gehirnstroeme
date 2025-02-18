@@ -21,3 +21,5 @@ imports und time und so müssen zu funktionen nicht ins hauptprogramm
 
 github video je person. nen branch erstellen nächstes mal zsm machen
 
+fehlerreport bei udp-stream
+
