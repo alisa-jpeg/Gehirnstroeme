@@ -18,9 +18,9 @@ from pygame.locals import*
 pygame.init()
 
 #funktionen importieren
-import calculate_average_alpha()
-import konsoleneingabe()
-import steigen() # hier später dann pygame_kreis
+from durchschnitt_berechnen import calculate_average_alpha
+from konsoleneingabe import konsoleneingabe
+from pygame_kreis import ballon_bewegen
 
 # Konfiguration der Netzwerkparameter
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
