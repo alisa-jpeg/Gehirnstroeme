@@ -30,6 +30,8 @@ def calculate_average_alpha():
     # Schließen des UDP-Socket, da er nicht mehr benötigt wird
     udp_socket.close()
 
+    
+
     # Berechnen des Durchschnitts der Alpha-Werte und gib ihn zurück
     # Falls keine Werte empfangen wurden, gib 0 zurück
     return sum(alpha_values) / len(alpha_values) if alpha_values else 0

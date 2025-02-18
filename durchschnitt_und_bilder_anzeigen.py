@@ -7,7 +7,7 @@ import socket
 #importieren und initialisieren von pygame
 import pygame
 
-import calculate_average_alpha)
+import calculate_average_alpha
 
 pygame.init()
 
