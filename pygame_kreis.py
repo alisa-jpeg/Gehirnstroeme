@@ -1,6 +1,6 @@
 def ballon_bewegen():
 	import pygame
-	import_calculate_average_alpha()
+	from durchschnitt_berechnen import calculate_average_alpha()
 	
 	pygame.init()
 	background = pygame.image.load("Hintergrundbild.png")
