@@ -10,4 +10,7 @@ konsoleneingabe muss zu tkinter werden
 bei hauptprogramm muss nen anfangsfenster angezeigt werden
 
 custom tkinter:
--wenn hauptprogramm gestartet wird
+
+-wenn hauptprogramm gestartet wird, wird zuerst fragebogen ausgefüllt 
+
+-- 
