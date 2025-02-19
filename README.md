@@ -13,4 +13,3 @@ custom tkinter:
 
 -wenn hauptprogramm gestartet wird, wird zuerst fragebogen ausgefüllt 
 
--- 
