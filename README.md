@@ -5,6 +5,7 @@ imports und time und so müssen zu funktionen nicht ins hauptprogramm
 6.märz nächstes treffen
 
 
+
 fehlerreport bei udp-stream
 
 konsoleneingabe muss zu tkinter werden
