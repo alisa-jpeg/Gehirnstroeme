@@ -2,6 +2,8 @@ pygame kreis alles wieder richtig machen
 
 imports und time und so müssen zu funktionen nicht ins hauptprogramm
 
+6.märz nächstes treffen
+
 
 fehlerreport bei udp-stream
 
