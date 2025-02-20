@@ -15,12 +15,13 @@ def calculate_average_alpha():
 
     # Startzeit, um die Empfangsdauer zu überwachen
     start_time = time.time()
-
+  
     while time.time() - start_time < DURATION and len(alpha_values) < MAX_PACKETS:
         try:
             # Empfang eines Datenpakets
             data, _ = udp_socket.recvfrom(BUFFER_SIZE)
             message = json.loads(data.decode('utf-8'))
+            alpha_values.append(message["data"][2])
 
             # Prüfe, ob "data" vorhanden ist und genügend Elemente enthält
             if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
