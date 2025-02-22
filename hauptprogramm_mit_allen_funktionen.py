@@ -78,7 +78,7 @@ def ballon_bewegen():	#base y mus definiert werden + udp stream muss noch gestra
 	
 	
 	#bewegung 
-        threshold = alpha_average # Schwellenwert
+        threshold = 50 # Schwellenwert
         speed = 2 # Geschwindigkeit der Bewegung
         direction = 0 #-1 für nach oben, 1 für nach unten
 	
@@ -96,7 +96,7 @@ def ballon_bewegen():	#base y mus definiert werden + udp stream muss noch gestra
                                 running = False 
                                 erfolg = "Das Spiel wurde abgebrochen. Klick erneut auf Spiel beginnen, um es erneut zu starten."
 	
-                value = alpha_values() #wert aus durchscnittsrechnung abrufen
+                value = alpha_average #wert aus durchschnittsrechnung abrufen
                 max_y1 = base_y - (value*1,5) # je größer value, desto höher geht der kreis, zielhöhe mit alpha values berechnen
                 max_y2 = max(50, min(max_y, base_y)) #begrenzung zwischen 50 und base_y -> kreis bewegt sich nicht aus dem bild raus
                 if max_y1 > max_y2:
@@ -120,8 +120,8 @@ def ballon_bewegen():	#base y mus definiert werden + udp stream muss noch gestra
                 pygame.display.flip() #bildschirm mit neuesten änderungen wird aktualisiert
         pygame.quit()
         
-        if erfolg != "Das Spiel wurde abgebrochen. Klick erneut auf Spiel beginnen, um es erneut zu starten." or erfolg != "Du hast es leider nicht geschafft, ruhig und entspannt zu bleiben.":
-            erfolg = "Super, du hast es geschafft, ruhig und entspannt zu bleiben!"
+        if erfolg != "Das Spiel wurde abgebrochen. Klick erneut auf Spiel beginnen, um es erneut zu starten." or erfolg != "Super! Du hast es geschafft, ruhig und entspannt zu bleiben":
+            erfolg = "Du hast es leider nicht geschafft, ruhig und entspannt zu bleiben"
 
 
 
