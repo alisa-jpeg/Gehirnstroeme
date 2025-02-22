@@ -25,5 +25,5 @@ button.grid(row= 0, column = 0, padx=20, pady=10)
 button = ctk.CTkButton(master=root_tk, text="durchschnittliches Alpha berechnen", command=calculate_average_alpha)
 button.grid(row = 0, column = 25, padx=20, pady=10)
 
-button = ctk.CTkButton(master=root_tk, text="spiel beginnen", command=steigen)
+button = ctk.CTkButton(master=root_tk, text="spiel beginnen", command=ballon_bewegen)
 button.grid(row = 0, column = 50, padx=20, pady=10)
