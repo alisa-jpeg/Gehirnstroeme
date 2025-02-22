@@ -1,14 +1,15 @@
-pygame kreis alles wieder richtig machen
+muss noch gemacht werden:
 
-imports und time und so müssen zu funktionen nicht ins hauptprogramm
+pygame kreis alles wieder richtig machen -- base y mus definiert werden + udp stream muss noch gestrartet werden --> im moment noch kein alpha_values verfügbar
+
+konsoleneingabe muss zu tkinter werden
+
+
 
 6.märz nächstes treffen
 
 
 
-fehlerreport bei udp-stream
-
-konsoleneingabe muss zu tkinter werden
 
 bei hauptprogramm muss nen anfangsfenster angezeigt werden
 
