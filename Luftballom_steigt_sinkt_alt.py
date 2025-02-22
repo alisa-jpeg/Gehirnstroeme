@@ -4,7 +4,7 @@ import json
 import socket
 import time
 import pygame
-
+from pygame.locals import *
 pygame.init()
 
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
@@ -16,6 +16,10 @@ MAX_PACKETS = 1000  # Die maximale Anzahl von Paketen, die verarbeitet werden
 QUIT = pygame.QUIT
 KEYDOWN = pygame.KEYDOWN
 K_ESCAPE = pygame.K_ESCAPE
+
+ballon = [pygame.image.load("ballon0.png"), pygame.image.load("ballon1.png"), pygame.image.load("ballon2.png")]
+
+alpha_average = 0
 
 
 def steigen(): #prozedur
@@ -60,7 +64,7 @@ def steigen(): #prozedur
                 fenster.blit(ballon[frame], (10, 10))
                 pygame.display.flip()
                 clock.tick(FPS)
-                spielaktiv = false  #hier for-schleife abbrechen und udp stream dann beenden
+                spielaktiv = False  #hier for-schleife abbrechen und udp stream dann beenden
 
             if alpha_values<alpha_average:
                 frame = 0 #bedeutet, ballon ist im normalzustand=
