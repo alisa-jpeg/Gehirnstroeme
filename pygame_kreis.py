@@ -1,7 +1,8 @@
-def ballon_bewegen():
-	import pygame
-	from durchschnitt_berechnen import calculate_average_alpha
-	
+
+import pygame
+from durchschnitt_berechnen import calculate_average_alpha
+
+def ballon_bewegen():	
 	pygame.init()
 	background = pygame.image.load("Hintergrundbild.png")
 	
@@ -25,7 +26,7 @@ def ballon_bewegen():
 				running = False
 	# falls escape taste gedrückt - fenster geschlossen
 	
-			elif event.type ==pygame.Keydon and event.key == pygame.K_ESCAPE:
+			elif event.type ==pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
 				running = False 
 	
 		value = alpha_values() #wert aus durchscnittsrechnung abrufen
