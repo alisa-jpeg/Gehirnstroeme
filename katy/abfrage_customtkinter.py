@@ -19,9 +19,6 @@ def daten_speichern(dateiname, daten):
         writer.writerow(daten)
     
 
-
-
-
 #farbe der widgets (green, dark-blue, blue)
 ctk.set_default_color_theme("green")
 
@@ -55,28 +52,28 @@ class App(ctk.CTk):
         self.label = ctk.CTkLabel(self, text="Wann haben Sie das letzte mal Kaffee getrunken?")
         self.label.grid(row=2, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton1 = ctk.CTkRadioButton(self, text="Innerhalb der letzten zwei Stunden")
+        self.RadioButton1 = ctk.CTkRadioButton(self, text="Innerhalb der letzten zwei Stunden", value = 1)
         self.RadioButton1.grid(row=2, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton2 = ctk.CTkRadioButton(self, text="Innerhalb der letzten 12 Stunden")
+        self.RadioButton2 = ctk.CTkRadioButton(self, text="Innerhalb der letzten 12 Stunden", value = 1)
         self.RadioButton2.grid(row=2, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton3 = ctk.CTkRadioButton(self, text="Vor über 12 Stunden")
+        self.RadioButton3 = ctk.CTkRadioButton(self, text="Vor über 12 Stunden", value = 1)
         self.RadioButton3.grid(row=2, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton4 = ctk.CTkRadioButton(self, text="Ich trinke keinen Kaffee")
+        self.RadioButton4 = ctk.CTkRadioButton(self, text="Ich trinke keinen Kaffee", value = 1)
         self.RadioButton4.grid(row=2, column=5, columnspan=1, padx=20, pady=20, sticky="w")
 #4. label
         self.label = ctk.CTkLabel(self, text="Sind Sie links- oder rechtshändig?")
         self.label.grid(row=3, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton5 = ctk.CTkRadioButton(self, text="Ich bin linkshändig.")
+        self.RadioButton5 = ctk.CTkRadioButton(self, text="Ich bin linkshändig.", value = 1)
         self.RadioButton5.grid(row=3, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton6 = ctk.CTkRadioButton(self, text="Ich bin rechtshändig.")
+        self.RadioButton6 = ctk.CTkRadioButton(self, text="Ich bin rechtshändig.", value = 1)
         self.RadioButton6.grid(row=3, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton7 = ctk.CTkRadioButton(self, text="Ich bin beidhändig.")
+        self.RadioButton7 = ctk.CTkRadioButton(self, text="Ich bin beidhändig.", value = 1)
         self.RadioButton7.grid(row=3, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 #5. label
@@ -90,18 +87,18 @@ class App(ctk.CTk):
         self.label = ctk.CTkLabel(self, text="Wie dicht/dick ist Ihr Haar?")
         self.label.grid(row=5, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton8 = ctk.CTkRadioButton(self, text="Ich habe eine Glatze.")
+        self.RadioButton8 = ctk.CTkRadioButton(self, text="Ich habe eine Glatze.", value = 1)
         self.RadioButton8.grid(row=5, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton9 = ctk.CTkRadioButton(self, text="Ich habe dünnes Haar.")
+        self.RadioButton9 = ctk.CTkRadioButton(self, text="Ich habe dünnes Haar.", value = 1)
         self.RadioButton9.grid(row=5, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton10 = ctk.CTkRadioButton(self, text="Ich habe dickes Haar.")
+        self.RadioButton10 = ctk.CTkRadioButton(self, text="Ich habe dickes Haar.", value = 1)
         self.RadioButton10.grid(row=5, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 
 #7. label
-        self.RadioButton11 = ctk.CTkRadioButton(self, text="Ihre Daten dürfen für unsere Zwecke verwendet werden.")
+        self.RadioButton11 = ctk.CTkRadioButton(self, text="Ihre Daten dürfen für unsere Zwecke verwendet werden.", value = 1)
         self.RadioButton11.grid(row=6, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
 #button zum schreiben der daten in ein dokument (später zum öffnen des hauptfensters)
@@ -110,45 +107,46 @@ class App(ctk.CTk):
 
 
     def createText(self):
-        #.get() gibt den wert des eingabefeldes zurück
+        #.cget("value") gibt den wert des eingabefeldes zurück
 
         kaffee = ""
-        if self.RadioButton1.get() == 1:
+        foo = self.RadioButton1.cget("value")
+        if self.RadioButton1.cget("value") == 1:
             kaffee = "Innerhalb der letzten zwei Stunden"
-        elif self.RadioButton2.get() == 1:
+        elif self.RadioButton2.cget("value") == 1:
             kaffee = "Innerhalb der letzten 12 Stunden"
-        elif self.RadioButton3.get() == 1:
+        elif self.RadioButton3.cget("value") == 1:
             kaffee = "Vor über 12 Stunden"
-        elif self.RadioButton4.get() == 1:
+        elif self.RadioButton4.cget("value") == 1:
             kaffee = "Ich trinke keinen Kaffee"
         else:
             kaffee = "Keine Angabe"
 
         haendigkeit = ""
-        if self.RadioButton5.get() == 1:
+        if self.RadioButton5.cget("value") == 1:
             haendigkeit = "Ich bin linkshändig."
-        elif self.RadioButton6.get() == 1:
+        elif self.RadioButton6.cget("value") == 1:
             haendigkeit = "Ich bin rechtshändig."
-        elif self.RadioButton7.get() == 1:
+        elif self.RadioButton7.cget("value") == 1:
             haendigkeit = "Ich bin beidhändig."
         else:
             haendigkeit = "Keine Angabe"
 
         haar = ""
-        if self.RadioButton8.get() == 1:
+        if self.RadioButton8.cget("value") == 1:
             haar = "Ich habe eine Glatze."
-        elif self.RadioButton9.get() == 1:
+        elif self.RadioButton9.cget("value") == 1:
             haar = "Ich habe dünnes Haar."
-        elif self.RadioButton10.get() == 1:
+        elif self.RadioButton10.cget("value") == 1:
             haar = "Ich habe dickes Haar."
         else:
             haar = "Keine Angabe"
 
         #text-variable füllen
-        text = {"Alter": self.nameEntry.get(),
+        text = {"Alter": self.nameEntry.cget("value"),
                 "Kaffee getrunken": kaffee, 
                 "Händigkeit": haendigkeit, 
-                "Müdigkeit": self.slider.get(), 
+                "Müdigkeit": self.slider.cget("value"), 
                 "Haarlänge": haar, 
                 "Zeitstempel": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
                 "Zufallsnummer": random.randint(1000, 9999)
@@ -156,7 +154,7 @@ class App(ctk.CTk):
 
 
 
-        if self.RadioButton11.get() == 0:
+        if self.RadioButton11.cget("value") == 0:
             text = {"Die Person hat den Datenschutz nicht akzeptiert."}
         
 
