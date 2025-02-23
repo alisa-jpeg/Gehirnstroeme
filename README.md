@@ -1,6 +1,8 @@
 muss noch gemacht werden:
 
-pygame kreis alles wieder richtig machen -- base y mus definiert werden + udp stream muss noch gestrartet werden --> im moment noch kein alpha_values verfügbar
+pygame kreis alles wieder richtig machen -- base y mus definiert werden 
+
+durchschnitt muss in erster textbox angezeigt werden
 
 konsoleneingabe muss zu tkinter werden
 

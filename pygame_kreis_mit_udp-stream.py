@@ -83,6 +83,6 @@ def ballon_bewegen():
 			erfolg = "Super! Du hast es geschafft, ruhig und entspannt zu bleiben"
 
 
-pygame.quit()
-# Schließen des UDP-Socket, da er nicht mehr benötigt wird
-udp_socket.close()
+	pygame.quit()
+	# Schließen des UDP-Socket, da er nicht mehr benötigt wird
+	udp_socket.close()
