@@ -6,6 +6,7 @@
 import customtkinter as ctk #für graphiken 
 import csv 
 from datetime import datetime
+import random
 
 root = ctk.CTk()
 
@@ -17,61 +18,9 @@ def daten_speichern(dateiname, daten):
             writer.writeheader()
         writer.writerow(daten)
     
-def main():
-    print("wir sind im main")
-    dateinam = "versuchsdaten.csv"
-    date = createText
-    daten_speichern(dateinam, date)
-    print("Daten erfolgreich gespeichert!")
-    root.destroy()
-
-
-def createText():
-    #.get() gibt den wert des eingabefeldes zurück
-
-    kaffee = ""
-    if self.RadioButton1.get() == 1:
-        kaffee = "Innerhalb der letzten zwei Stunden"
-    elif self.RadioButton2.get() == 1:
-        kaffee = "Innerhalb der letzten 12 Stunden"
-    elif self.RadioButton3.get() == 1:
-        kaffee = "Vor über 12 Stunden"
-    elif self.RadioButton4.get() == 1:
-        kaffee = "Ich trinke keinen Kaffee"
-    else:
-        kaffee = "Keine Angabe"
-
-    haendigkeit = ""
-    if self.RadioButton5.get() == 1:
-        haendigkeit = "Ich bin linkshändig."
-    elif self.RadioButton6.get() == 1:
-        haendigkeit = "Ich bin rechtshändig."
-    elif self.RadioButton7.get() == 1:
-        haendigkeit = "Ich bin beidhändig."
-    else:
-        haendigkeit = "Keine Angabe"
-
-    haar = ""
-    if self.RadioButton8.get() == 1:
-        haar = "Ich habe eine Glatze."
-    elif self.RadioButton9.get() == 1:
-        haar = "Ich habe dünnes Haar."
-    elif self.RadioButton10.get() == 1:
-        haar = "Ich habe dickes Haar."
-    else:
-        haar = "Keine Angabe"
-
-    #text-variable füllen
-    text = f"Alter: {self.nameEntry.get()}, Kaffee getrunken: {kaffee}, Händigkeit: {haendigkeit}, Müdigkeit: {self.slider.get()}, Haarlänge: {haar}, Zeitstempel: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, Zufallsnummer: {random.randint(1000, 9999)}"
 
 
 
-    if self.RadioButton11.get() == 0:
-        text = {"Die Person hat den Datenschutz nicht akzeptiert."}
-    
-
-    return text
-# Hauptfenster der Anwendung erstellen
 
 #farbe der widgets (green, dark-blue, blue)
 ctk.set_default_color_theme("green")
@@ -156,8 +105,72 @@ class App(ctk.CTk):
         self.RadioButton11.grid(row=6, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
 #button zum schreiben der daten in ein dokument (später zum öffnen des hauptfensters)
-        self.generateResultsButton = ctk.CTkButton(self, text ="Daten speichern", command = main)
+        self.generateResultsButton = ctk.CTkButton(self, text ="Daten speichern", command = self.abschluss)
         self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")
+
+
+    def createText(self):
+        #.get() gibt den wert des eingabefeldes zurück
+
+        kaffee = ""
+        if self.RadioButton1.get() == 1:
+            kaffee = "Innerhalb der letzten zwei Stunden"
+        elif self.RadioButton2.get() == 1:
+            kaffee = "Innerhalb der letzten 12 Stunden"
+        elif self.RadioButton3.get() == 1:
+            kaffee = "Vor über 12 Stunden"
+        elif self.RadioButton4.get() == 1:
+            kaffee = "Ich trinke keinen Kaffee"
+        else:
+            kaffee = "Keine Angabe"
+
+        haendigkeit = ""
+        if self.RadioButton5.get() == 1:
+            haendigkeit = "Ich bin linkshändig."
+        elif self.RadioButton6.get() == 1:
+            haendigkeit = "Ich bin rechtshändig."
+        elif self.RadioButton7.get() == 1:
+            haendigkeit = "Ich bin beidhändig."
+        else:
+            haendigkeit = "Keine Angabe"
+
+        haar = ""
+        if self.RadioButton8.get() == 1:
+            haar = "Ich habe eine Glatze."
+        elif self.RadioButton9.get() == 1:
+            haar = "Ich habe dünnes Haar."
+        elif self.RadioButton10.get() == 1:
+            haar = "Ich habe dickes Haar."
+        else:
+            haar = "Keine Angabe"
+
+        #text-variable füllen
+        text = {"Alter": self.nameEntry.get(),
+                "Kaffee getrunken": kaffee, 
+                "Händigkeit": haendigkeit, 
+                "Müdigkeit": self.slider.get(), 
+                "Haarlänge": haar, 
+                "Zeitstempel": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
+                "Zufallsnummer": random.randint(1000, 9999)
+        }       
+
+
+
+        if self.RadioButton11.get() == 0:
+            text = {"Die Person hat den Datenschutz nicht akzeptiert."}
+        
+
+        return text
+    
+    def abschluss(self):
+        print("wir sind im abschluss")
+        dateiname = "versuchsdaten.csv"
+        daten = self.createText()
+        daten_speichern(dateiname, daten)
+        print("Daten erfolgreich gespeichert!")
+        root.destroy()
+
+# Hauptfenster der Anwendung erstellen
 
 
 
@@ -165,5 +178,4 @@ class App(ctk.CTk):
 if __name__ == "__main__": 
     app = App()
     app.mainloop()
-    main
 
