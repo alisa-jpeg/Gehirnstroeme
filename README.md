@@ -36,3 +36,5 @@ custom tkinter:
 - durchschnitt berechnen -- irgendwie anzeigen dass der grade noch berechnet wird
 
 - challenge starten -- neues fenster mit pygame und dem kreis/luftballom der rumfliegt, hat man verloren, schließt sich das programm und das haupfenster wird wieder angezeigt
+
+
