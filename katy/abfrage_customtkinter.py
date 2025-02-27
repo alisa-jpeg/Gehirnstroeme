@@ -166,14 +166,25 @@ class App(ctk.CTk):
         daten = self.createText()
         daten_speichern(dateiname, daten)
         print("Daten erfolgreich gespeichert!")
-        self.destroy
-        #self.open_toplevel
+        self.open_toplevel()
+
+    #def open_toplevel(self):
+     #   self.toplevel_window = Spiel(self)
+      #  self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing)
+
     
     def open_toplevel(self):
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
                 self.toplevel_window = Spiel(self) #spiel-fenster erstellen wenn es noch nicht existiert
+                self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing) #wenn spiel-fenster geschlossen wird, soll auch das hauptfenster geschlossen werden
             else:
                 self.toplevel_window.focus() #wenn spiel-fenster schon da ist, fokus darauf setzen
+
+
+    def on_closing(self):
+        self.toplevel_window.destroy()
+        self.destroy()
+        self.quit()
 
 # Hauptfenster der Anwendung erstellen
 
@@ -182,8 +193,8 @@ class Spiel(ctk.CTkToplevel):
         super().__init__(*args, **kwargs)
 
         self.title("Brain-Computer-Interface-Spiel")
-        self.geometry("{AppWidth} * {AppHeight}")
-        self.destroy
+        self.geometry(f"{appWidth}x{appHeight}")
+        self.toplevel_window = None
 
         #hierhin kommt der restliche code für das spiel
 
