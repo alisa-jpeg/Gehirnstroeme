@@ -143,10 +143,10 @@ class App(ctk.CTk):
             haar = "Keine Angabe"
 
         #text-variable füllen
-        text = {"Alter": self.nameEntry.cget("value"),
+        text = {"Alter": self.nameEntry.cget("text"),
                 "Kaffee getrunken": kaffee, 
                 "Händigkeit": haendigkeit, 
-                "Müdigkeit": self.slider.cget("value"), 
+                "Müdigkeit": self.slider.get(), 
                 "Haarlänge": haar, 
                 "Zeitstempel": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
                 "Zufallsnummer": random.randint(1000, 9999)
