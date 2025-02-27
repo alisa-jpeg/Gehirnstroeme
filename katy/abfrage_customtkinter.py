@@ -169,16 +169,16 @@ class App(ctk.CTk):
         self.open_toplevel()
 
     #def open_toplevel(self):
-     #   self.toplevel_window = Spiel(self)
+     #   self.toplevel_window = Toplevelwindow(self)
       #  self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     
     def open_toplevel(self):
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-                self.toplevel_window = Spiel(self) #spiel-fenster erstellen wenn es noch nicht existiert
-                self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing) #wenn spiel-fenster geschlossen wird, soll auch das hauptfenster geschlossen werden
+                self.toplevel_window = Toplevelwindow(self) #Toplevelwindow-fenster erstellen wenn es noch nicht existiert
+                self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing) #wenn Toplevelwindow-fenster geschlossen wird, soll auch das hauptfenster geschlossen werden
             else:
-                self.toplevel_window.focus() #wenn spiel-fenster schon da ist, fokus darauf setzen
+                self.toplevel_window.focus() #wenn Toplevelwindow-fenster schon da ist, fokus darauf setzen
 
 
     def on_closing(self):
@@ -188,7 +188,7 @@ class App(ctk.CTk):
 
 # Hauptfenster der Anwendung erstellen
 
-class Spiel(ctk.CTkToplevel):
+class Toplevelwindow(ctk.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
