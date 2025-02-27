@@ -169,7 +169,7 @@ class App(ctk.CTk):
         self.open_toplevel()
     
     def open_toplevel(self):
-            if self.toplevel_window is NOne or not self.toplevel_window.winfo_exists():
+            if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
                 self.toplevel_window = Spiel(self) #spiel-fenster erstellen wenn es noch nicht existiert
             else:
                 self.toplevel_window.focus() #wenn spiel-fenster schon da ist, fokus darauf setzen
@@ -182,6 +182,7 @@ class Spiel(ctk.CTkToplevel):
 
         self.title("Brain-Computer-Interface-Spiel")
         self.geometry("{AppWidth} * {AppHeight}")
+        self.destroy
 
         #hierhin kommt der restliche code für das spiel
 
