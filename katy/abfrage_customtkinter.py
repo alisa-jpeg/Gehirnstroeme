@@ -166,7 +166,7 @@ class App(ctk.CTk):
         daten = self.createText()
         daten_speichern(dateiname, daten)
         print("Daten erfolgreich gespeichert!")
-        root.destroy()
+        self.destroy()
 
 # Hauptfenster der Anwendung erstellen
 
