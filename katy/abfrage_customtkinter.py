@@ -143,7 +143,7 @@ class App(ctk.CTk):
             haar = "Keine Angabe"
 
         #text-variable füllen
-        text = {"Alter": self.nameEntry.cget("text"),
+        text = {"Alter": self.nameEntry.get,
                 "Kaffee getrunken": kaffee, 
                 "Händigkeit": haendigkeit, 
                 "Müdigkeit": self.slider.get(), 
