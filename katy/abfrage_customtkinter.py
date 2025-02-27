@@ -166,7 +166,7 @@ class App(ctk.CTk):
         daten = self.createText()
         daten_speichern(dateiname, daten)
         print("Daten erfolgreich gespeichert!")
-        self.open_toplevel()
+        self.open_toplevel
     
     def open_toplevel(self):
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
