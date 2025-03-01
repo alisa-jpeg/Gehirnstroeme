@@ -5,7 +5,7 @@
 
 #nötige dinge importieren
 import customtkinter as ctk #für graphiken 
-
+import threading
 import json
 import socket
 import time
@@ -14,7 +14,7 @@ import pygame
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
 PORT = 12345        # Der Port, auf dem Daten empfangen werden sollen
 BUFFER_SIZE = 1024  # Die maximale Größe eines UDP-Datenpakets in Bytes
-DURATION = 10      # Die Dauer (in Sekunden), für die Daten empfangen werden
+DURATION = 2        # Die Dauer (in Sekunden), für die Daten empfangen werden
 MAX_PACKETS = 1000  # Die maximale Anzahl von Paketen, die verarbeitet werden
 
 erfolg = ""
@@ -67,62 +67,11 @@ def calculate_average_alpha():
 
 
 
-def ballon_bewegen():	#base y mus definiert werden + udp stream muss noch gestrartet werden --> im moment noch kein alpha_values verfügbar
-        pygame.init()
-        background = pygame.image.load("Hintergrundbild.png")
-	
-	#screen erzeugen
-        window_width = 600
-        window_height = 800
-        window = pygame.display.set_mode((window_width, window_height))
-	
-	
-	#bewegung 
-        threshold = 50 # Schwellenwert
-        speed = 2 # Geschwindigkeit der Bewegung
-        direction = 0 #-1 für nach oben, 1 für nach unten
-	
-        clock = pygame.time.Clock() #geschwindigkeit regulieren
-        running = True #solange true, läuft das spiel
-	#eventschleife
-        while running:
-                for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                                running = False
-                                erfolg = "Das Spiel wurde abgebrochen. Klick erneut auf Spiel beginnen, um es erneut zu starten."
-	# falls escape taste gedrückt - fenster geschlossen
-	
-                        elif event.type ==pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                                running = False 
-                                erfolg = "Das Spiel wurde abgebrochen. Klick erneut auf Spiel beginnen, um es erneut zu starten."
-	
-                value = alpha_average #wert aus durchschnittsrechnung abrufen
-                max_y1 = base_y - (value*1,5) # je größer value, desto höher geht der kreis, zielhöhe mit alpha values berechnen
-                max_y2 = max(50, min(max_y, base_y)) #begrenzung zwischen 50 und base_y -> kreis bewegt sich nicht aus dem bild raus
-                if max_y1 > max_y2:
-                        max_y = max_y2
-                else:
-                        max_y = max_y1
+def ballon_bewegen(): 
+        # hier pygame_kreis einfügen und erfolg je nach ausgang umsetzen
 
-                if value > threshold:
-                        direction == -1 and y < max_y
-                        y -= speed 
-                elif direction == 1 and y < base_y: #nach unten zur grundhöhe
-                        y +=speed
-		
-                window.fill((0, 200, 0))
-		
-	
-                pygame.draw.ellipse(window, "red" , [10,30,150,150], 1) # kreis zeichnen, Position, Nummer hinten steht für dicke der Umrandung
-                pygame.display.update()
-		
-                clock.tick(30) #Schleife wird max 30x pro sekunde durchgelaufen -> kreis bewegt sich gleichmäßig
-                pygame.display.flip() #bildschirm mit neuesten änderungen wird aktualisiert
-        pygame.quit()
+        return erfolg
         
-        if erfolg != "Das Spiel wurde abgebrochen. Klick erneut auf Spiel beginnen, um es erneut zu starten." or erfolg != "Super! Du hast es geschafft, ruhig und entspannt zu bleiben":
-            erfolg = "Du hast es leider nicht geschafft, ruhig und entspannt zu bleiben"
-
 
 
 #beginn hauptprogramm
@@ -136,43 +85,56 @@ ctk.set_default_color_theme("green")
 ctk.set_appearance_mode("Dark") 
 
 #größe fenster
-appWidth, appHeight = 800, 600
+appWidth, appHeight = 1200, 200
 
 #App Class
 class App(ctk.CTk):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-#titel fenster
-        self.title("Brain-Computer-Interface") 
-#größe fenster auf das was zuvor festgelegt wurde
-        self.geometry(f"{appWidth}x{appHeight}")
-#erstellt button1
-        self.generateResultsButton = ctk.CTkButton(self, text = "Durchschnitt berechnen", command = self.alpha_anzeigen) 
-        self.generateResultsButton.grid(row=1, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="ew")
+        def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+        #titel fenster
+                self.title("Brain-Computer-Interface") 
+        #größe fenster auf das was zuvor festgelegt wurde
+                self.geometry(f"{appWidth}x{appHeight}")
+        #erstellt button1
+                self.generateResultsButton = ctk.CTkButton(self, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
+                self.generateResultsButton.grid(row=1, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
-#erstellt text box 1 um average_alpha anzuzeigen
-        self.displayBox = ctk.CTkTextbox(self, width=300, height=25)
-        self.displayBox.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="nsew")
+        #erstellt text box 1 um average_alpha anzuzeigen
+                self.displayBox1 = ctk.CTkTextbox(self, width=300, height=25)
+                self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="s")
 
-#erstellt text box 2 um endergebnis anzuzeigen
-        self.displayBox = ctk.CTkTextbox(self, width=300, height=25)
-        self.displayBox.grid(row=3, column=4, columnspan=2, padx=20, pady=20, sticky="nsew")
+        #erstellt text box 2 um endergebnis anzuzeigen
+                self.displayBox2 = ctk.CTkTextbox(self, width=300, height=25)
+                self.displayBox2.grid(row=3, column=4, columnspan=2, padx=20, pady=20, sticky="s")
 
 
-#erstellt button2
-        self.generateResultsButton = ctk.CTkButton(self, text = "Spiel beginnen", command = self.spiel_beginnen)
-        self.generateResultsButton.grid(row=3, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="ew")
+        #erstellt button2
+                self.generateResultsButton = ctk.CTkButton(self, text = "Spiel beginnen", command = self.spiel_beginnen)
+                self.generateResultsButton.grid(row=3, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
-    def alpha_anzeigen(self):
-        self.displayBox.delete("0.0", "200.0")
-        text = calculate_average_alpha()
-        self.displayBox.insert("0.0", text)
-        alpha_average = text
+        #erstellt textfeld, damit man sieht ob udp-stream läuft
+                self.displayBox3 = ctk.CTkTextbox(self, width=500, height=25)
+                self.displayBox3.grid(row=1, column=6, columnspan=2, padx=20, pady=20, sticky="w")
+                self.displayBox3.insert("0.0", "UDP-Stream nicht gestartet - Bitte lassen Sie den Durchschnitt berechnen")
 
-    def spiel_beginnen(self):
-        self.displayBox.delete("0.0", "200.0")
-        text = erfolg
-        self.displayBox.insert("0.0", text)
+        def durchschnitt_berechnen(self):
+                self.displayBox3.delete("0.0", "200.0")
+                self.displayBox3.insert("0.0", "UDP-Stream läuft - Bitte warten Sie einen Moment")
+                threading.Thread(target=self.alpha_anzeigen).start()
+
+        def alpha_anzeigen(self):
+                text = calculate_average_alpha()
+                self.displayBox1.delete("0.0", "200.0")
+                self.displayBox1.insert("0.0", text)
+                self.displayBox3.delete("0.0", "200.0")
+                self.displayBox3.insert("0.0", "UDP-Stream ist abgeschlossen - Das Spiel kann beginnen!")
+                alpha_average = text
+
+
+        def spiel_beginnen(self):
+                self.displayBox2.delete("0.0", "200.0")
+                text = erfolg
+                self.displayBox2.insert("0.0", text)
 
 
 
