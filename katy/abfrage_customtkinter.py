@@ -7,6 +7,7 @@ import customtkinter as ctk #für graphiken
 import csv 
 from datetime import datetime
 import random
+import tkinter.messagebox as msgbox
 
 root = ctk.CTk()
 
@@ -31,7 +32,7 @@ appWidth, appHeight = 2000, 600
 radio_var0 = ctk.IntVar()
 radio_var1 = ctk.IntVar()
 radio_var2 = ctk.IntVar()
-radio_var3 = ctk.IntVar()
+
 
 
 #App Class
@@ -47,11 +48,13 @@ class App(ctk.CTk):
         #wenn fenster geschlossen wird, danna auch das geamte programm
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
+        # Initialisieren der Flagge für "Daten nicht speichern"
+        self.show_only_flag = False
 
 
 
 #erstes label-überschrift
-        self.label = ctk.CTkLabel(self, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können (immer nur ein Kreuz setzen):")
+        self.label = ctk.CTkLabel(self, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können:")
         self.label.grid(row=0, column=0, columnspan=2, padx=20, pady=20, sticky="ew")
 
 #alter
@@ -115,13 +118,18 @@ class App(ctk.CTk):
         self.RadioButton10.grid(row=5, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 
-#7. label
-        self.RadioButton11 = ctk.CTkRadioButton(self, text="Ihre Daten dürfen für unsere Zwecke verwendet werden.", value = 1, variable=radio_var3)
-        self.RadioButton11.grid(row=6, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-#button zum schreiben der daten in ein dokument (später zum öffnen des hauptfensters)
-        self.generateResultsButton = ctk.CTkButton(self, text ="Daten speichern", command =self.abschluss)
-        self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")
+#button zum schreiben der daten in ein dokument
+        self.generateResultsButton = ctk.CTkButton(self, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.abschluss)
+        self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")       
+        
+         # Button für die Option keine Daten zu speichern (nur Anschauungszwecke)
+        self.showOnlyButton = ctk.CTkButton(self, text="Daten nicht speichern (nur zu Anschauungszwecken)", command=self.show_only)
+        self.showOnlyButton.grid(row=7, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
+
+
+
+
 
     def slider_event(self, value):
         self.label = ctk.CTkLabel(self, text=value)
@@ -134,7 +142,7 @@ class App(ctk.CTk):
         v0 = radio_var0.get()
         v1 = radio_var1.get()
         v2 = radio_var2.get()
-        v3 = radio_var3.get()
+
 
         kaffee = ""
         if v0 == 1:
@@ -180,18 +188,53 @@ class App(ctk.CTk):
 
 
 
-        if v3 != 1:
-            text = {"Die Person hat den Datenschutz nicht akzeptiert."}
+ 
         
 
         return text
     
+    # Validierung der Benutzereingaben
+    def validate_inputs(self):
+
+        v0 = radio_var0.get()
+        v1 = radio_var1.get()
+        v2 = radio_var2.get()
+
+        # Wenn der Benutzer "Daten nicht speichern" gewählt hat, keine Validierung erforderlich
+        if self.show_only_flag:
+            return True
+
+        try:
+            alter = int(self.nameEntry.get())
+            if alter < 1 or alter > 120:
+                raise ValueError
+        except ValueError:
+            msgbox.showerror("Fehler", "Bitte geben Sie ein gültiges Alter zwischen 1 und 120 ein.")
+            return False
+
+        if v0 == 0:
+            msgbox.showerror("Fehler", "Bitte wählen Sie eine Option für den Kaffeekonsum.")
+            return False
+
+        if v1 == 0:
+            msgbox.showerror("Fehler", "Bitte wählen Sie eine Option für Ihre Händigkeit.")
+            return False
+
+        if v2 == 0:
+            msgbox.showerror("Fehler", "Bitte wählen Sie eine Option für Ihren Haartyp.")
+            return False
+
+
+        return True
+    
     def abschluss(self):
+        if not self.validate_inputs():
+            return
         print("wir sind im abschluss")
         dateiname = "versuchsdaten.csv"
         daten = self.createText()
         daten_speichern(dateiname, daten)
-        print("Daten erfolgreich gespeichert!")
+        msgbox.showinfo("Erfolg", "Die Daten wurden erfolgreich gespeichert.")
         self.open_toplevel()
     
     def open_toplevel(self):
@@ -206,6 +249,14 @@ class App(ctk.CTk):
             self.toplevel_window.destroy()
         self.destroy()
         self.quit()
+
+    # Wenn der Benutzer nur zu Anschauungszwecken arbeitet (keine Speicherung)
+    def show_only(self):
+        self.show_only_flag = True
+        msgbox.showinfo("Nur zur Ansicht", "Keine Daten werden gespeichert. Dies dient nur der Anschauung.")
+        self.show_only_flag = False
+        self.open_toplevel()
+
 
 
 # Hauptfenster der Anwendung erstellen
