@@ -4,7 +4,7 @@ pygame kreis alles wieder richtig machen -- base y mus definiert werden
 
 durchschnitt muss in erster textbox angezeigt werden
 
-konsoleneingabe muss zu tkinter werden
+toplevelwindow muss direkt in fokus gesetzt werden
 
 
 
