@@ -28,10 +28,10 @@ ctk.set_appearance_mode("Dark")
 #größe fenster
 appWidth, appHeight = 2000, 600
 
-radio_var0 = ctk.IntVar(0)
-radio_var1 = ctk.IntVar(0)
-radio_var2 = ctk.IntVar(0)
-radio_var3 = ctk.IntVar(0)
+radio_var0 = ctk.IntVar()
+radio_var1 = ctk.IntVar()
+radio_var2 = ctk.IntVar()
+radio_var3 = ctk.IntVar()
 
 
 #App Class
@@ -65,48 +65,53 @@ class App(ctk.CTk):
         self.label = ctk.CTkLabel(self, text="Wann haben Sie das letzte mal Kaffee getrunken?")
         self.label.grid(row=2, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton1 = ctk.CTkRadioButton(self, text="Innerhalb der letzten zwei Stunden", value = 0, variable = radio_var0)
+        self.RadioButton1 = ctk.CTkRadioButton(self, text="Innerhalb der letzten zwei Stunden", value = 1, variable = radio_var0)
         self.RadioButton1.grid(row=2, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton2 = ctk.CTkRadioButton(self, text="Innerhalb der letzten 12 Stunden", value = 1, variable = radio_var0)
+        self.RadioButton2 = ctk.CTkRadioButton(self, text="Innerhalb der letzten 12 Stunden", value = 2, variable = radio_var0)
         self.RadioButton2.grid(row=2, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton3 = ctk.CTkRadioButton(self, text="Vor über 12 Stunden", value = 2, variable = radio_var0)
+        self.RadioButton3 = ctk.CTkRadioButton(self, text="Vor über 12 Stunden", value = 3, variable = radio_var0)
         self.RadioButton3.grid(row=2, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton4 = ctk.CTkRadioButton(self, text="Ich trinke keinen Kaffee", value = 3, variable = radio_var0)
+        self.RadioButton4 = ctk.CTkRadioButton(self, text="Ich trinke keinen Kaffee", value = 4, variable = radio_var0)
         self.RadioButton4.grid(row=2, column=5, columnspan=1, padx=20, pady=20, sticky="w")
 #4. label
         self.label = ctk.CTkLabel(self, text="Sind Sie links- oder rechtshändig?")
         self.label.grid(row=3, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton5 = ctk.CTkRadioButton(self, text="Ich bin linkshändig.", value = 0, variable = radio_var1)
+        self.RadioButton5 = ctk.CTkRadioButton(self, text="Ich bin linkshändig.", value = 1, variable = radio_var1)
         self.RadioButton5.grid(row=3, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton6 = ctk.CTkRadioButton(self, text="Ich bin rechtshändig.", value = 1, variable = radio_var1)
+        self.RadioButton6 = ctk.CTkRadioButton(self, text="Ich bin rechtshändig.", value = 2, variable = radio_var1)
         self.RadioButton6.grid(row=3, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton7 = ctk.CTkRadioButton(self, text="Ich bin beidhändig.", value = 2, variable = radio_var1)
+        self.RadioButton7 = ctk.CTkRadioButton(self, text="Ich bin beidhändig.", value = 3, variable = radio_var1)
         self.RadioButton7.grid(row=3, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 #5. label
         self.label = ctk.CTkLabel(self, text="Wie müde fühlen Sie sich gerade? (1=Adrenalinschub, 10=Schlaf)")
         self.label.grid(row=4, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.slider = ctk.CTkSlider(self, from_=1, to=10, number_of_steps=10)
+        self.slider = ctk.CTkSlider(self, from_=1, to=10, number_of_steps=10, command = self.slider_event)
         self.slider.grid(row=4, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
+
+        self.label = ctk.CTkLabel(self, text="1")
+
+
+
 
 #6. label
         self.label = ctk.CTkLabel(self, text="Wie dicht/dick ist Ihr Haar?")
         self.label.grid(row=5, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton8 = ctk.CTkRadioButton(self, text="Ich habe eine Glatze.", value = 0, variable = radio_var2)
+        self.RadioButton8 = ctk.CTkRadioButton(self, text="Ich habe eine Glatze.", value = 1, variable = radio_var2)
         self.RadioButton8.grid(row=5, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton9 = ctk.CTkRadioButton(self, text="Ich habe dünnes Haar.", value = 1, variable=radio_var2)
+        self.RadioButton9 = ctk.CTkRadioButton(self, text="Ich habe dünnes Haar.", value = 2, variable=radio_var2)
         self.RadioButton9.grid(row=5, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton10 = ctk.CTkRadioButton(self, text="Ich habe dickes Haar.", value = 2, variable=radio_var2)
+        self.RadioButton10 = ctk.CTkRadioButton(self, text="Ich habe dickes Haar.", value = 3, variable=radio_var2)
         self.RadioButton10.grid(row=5, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 
@@ -118,6 +123,10 @@ class App(ctk.CTk):
         self.generateResultsButton = ctk.CTkButton(self, text ="Daten speichern", command =self.abschluss)
         self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")
 
+    def slider_event(self, value):
+        self.label = ctk.CTkLabel(self, text=value)
+        self.label.grid(row=4, column=4, columnspan=2, padx=20, pady=20, sticky="w")
+
 
 
     def createText(self):
@@ -128,39 +137,39 @@ class App(ctk.CTk):
         v3 = radio_var3.get()
 
         kaffee = ""
-        if v0 == 0:
+        if v0 == 1:
             kaffee = "Innerhalb der letzten zwei Stunden"
-        elif v0 == 1:
+        elif v0 == 2:
             kaffee = "Innerhalb der letzten 12 Stunden"
-        elif v0  == 2:
+        elif v0  == 3:
             kaffee = "Vor über 12 Stunden"
-        elif v0 == 3:
+        elif v0 == 4:
             kaffee = "Ich trinke keinen Kaffee"
         else:
             kaffee = "Keine Angabe"
 
         haendigkeit = ""
-        if v1 == 0:
+        if v1 == 1:
             haendigkeit = "Ich bin linkshändig."
-        elif v2 == 1:
+        elif v2 == 2:
             haendigkeit = "Ich bin rechtshändig."
-        elif v1 == 2:
+        elif v1 == 3:
             haendigkeit = "Ich bin beidhändig."
         else:
             haendigkeit = "Keine Angabe"
 
         haar = ""
-        if v2 == 0:
+        if v2 == 1:
             haar = "Ich habe eine Glatze."
-        elif v2 == 1:
-            haar = "Ich habe dünnes Haar."
         elif v2 == 2:
+            haar = "Ich habe dünnes Haar."
+        elif v2 == 3:
             haar = "Ich habe dickes Haar."
         else:
             haar = "Keine Angabe"
 
         #text-variable füllen
-        text = {"Alter": self.nameEntry.get,
+        text = {"Alter": self.nameEntry.get(),
                 "Kaffee getrunken": kaffee, 
                 "Händigkeit": haendigkeit, 
                 "Müdigkeit": self.slider.get(), 
