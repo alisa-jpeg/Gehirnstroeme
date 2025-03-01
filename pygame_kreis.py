@@ -3,6 +3,7 @@ import pygame
 from durchschnitt_berechnen import calculate_average_alpha
 
 def ballon_bewegen():	
+	base_y = 20
 	pygame.init()
 	background = pygame.image.load("Hintergrundbild.png")
 	
@@ -13,7 +14,7 @@ def ballon_bewegen():
 	
 	
 	#bewegung 
-	threshold = 50 # Schwellenwert
+	threshold = 1.1 * alpha_average # Schwellenwert
 	speed = 2 # Geschwindigkeit der Bewegung
 	direction = 0 #-1 für nach oben, 1 für nach unten
 	

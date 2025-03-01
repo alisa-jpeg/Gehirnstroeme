@@ -23,10 +23,10 @@ def ballon_bewegen():
 	
 	
 	#bewegung 
-	threshold = 50 # Schwellenwert
+	threshold = 1.1*alpha_average # Schwellenwert
 	speed = 2 # Geschwindigkeit der Bewegung
 	direction = 0 #-1 für nach oben, 1 für nach unten
-	base_y = 400 # Maximalhöhe des Ballons
+	base_y = 300 # Starthöhe des Ballons
 	
 	clock = pygame.time.Clock() #geschwindigkeit regulieren
 	running = True #solange true, läuft das spiel

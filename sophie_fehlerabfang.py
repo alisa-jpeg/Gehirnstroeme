@@ -176,8 +176,8 @@ class App(ctk.CTk):
 
     # Wenn die Daten gespeichert werden sollen
     def abschluss(self):
-        if not self.validate_inputs():
-            return
+        if not self.validate_inputs:
+            return 
         daten = self.createText()
         dateiname = "fragebogen_daten.csv"
         daten_speichern(dateiname, daten)
