@@ -32,10 +32,15 @@ appWidth, appHeight = 2000, 600
 class App(ctk.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.toplevel_window = None
 #titel fenster
         self.title("Brain-Computer-Interface-Fragebogen") 
 #größe fenster auf das was zuvor festgelegt wurde
         self.geometry(f"{appWidth}x{appHeight}")
+
+        #wenn fenster geschlossen wird, danna auch das geamte programm
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
 
 #erstes label-überschrift
         self.label = ctk.CTkLabel(self, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können (immer nur ein Kreuz setzen):")
@@ -166,35 +171,32 @@ class App(ctk.CTk):
         daten = self.createText()
         daten_speichern(dateiname, daten)
         print("Daten erfolgreich gespeichert!")
-        self.open_toplevel
-
-    #def open_toplevel(self):
-     #   self.toplevel_window = Toplevelwindow(self)
-      #  self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing)
-
+        self.open_toplevel()
     
     def open_toplevel(self):
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-                self.toplevel_window = Toplevelwindow(self) #Toplevelwindow-fenster erstellen wenn es noch nicht existiert
-                self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing) #wenn Toplevelwindow-fenster geschlossen wird, soll auch das hauptfenster geschlossen werden
+                self.toplevel_window = ToplevelWindow(self) #Toplevelwindow-fenster erstellen wenn es noch nicht existiert
+                self.toplevel_window.focus_set() #fokus auf das Toplevelwindow-fenster setzen
             else:
-                self.toplevel_window.focus() #wenn Toplevelwindow-fenster schon da ist, fokus darauf setzen
+                self.toplevel_window.focus_set() #wenn Toplevelwindow-fenster schon da ist, fokus darauf setzen
 
 
     def on_closing(self):
-        self.toplevel_window.destroy()
+        if self.toplevel_window is not None:
+            self.toplevel_window.destroy()
         self.destroy()
         self.quit()
 
 # Hauptfenster der Anwendung erstellen
 
-class Toplevelwindow(ctk.CTkToplevel):
+class ToplevelWindow(ctk.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.title("Brain-Computer-Interface-Spiel")
         self.geometry(f"{appWidth}x{appHeight}")
         self.toplevel_window = None
+
 
         #hierhin kommt der restliche code für das spiel
 
@@ -204,4 +206,3 @@ class Toplevelwindow(ctk.CTkToplevel):
 if __name__ == "__main__": 
     app = App()
     app.mainloop()
-
