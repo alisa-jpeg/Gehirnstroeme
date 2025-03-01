@@ -197,9 +197,8 @@ class App(ctk.CTk):
     def open_toplevel(self):
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
                 self.toplevel_window = ToplevelWindow(self) #Toplevelwindow-fenster erstellen wenn es noch nicht existiert
-                self.toplevel_window.focus_set() #fokus auf das Toplevelwindow-fenster setzen
-            else:
-                self.toplevel_window.focus_set() #wenn Toplevelwindow-fenster schon da ist, fokus darauf setzen
+                self.toplevel_window.grab_set() #fokus auf das Toplevelwindow-fenster setzen
+
 
 
     def on_closing(self):

@@ -6,7 +6,6 @@ durchschnitt muss in erster textbox angezeigt werden
 
 toplevelwindow muss direkt in fokus gesetzt werden
 
-slider soll aktuelle variable anzeigen
 
 
 
