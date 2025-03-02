@@ -16,6 +16,7 @@ MAX_PACKETS = 1000
 SENSITIVITY = 0.10  # 10% Anstieg → Ballon steigt
 CRITICAL_LIMIT = 0.50  # 50% Anstieg → Spielabbruch
 
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -98,7 +99,6 @@ class App(ctk.CTk):
         y = base_y
         speed = 2
         balloon_color = (0, 255, 0)  # Grün
-        font = pygame.font.SysFont(None, 36)
 
         running = True
         while running:
@@ -106,32 +106,25 @@ class App(ctk.CTk):
                 if event.type == pygame.QUIT:
                     running = False
 
-            # Hier bestimmen wir die Geschwindigkeit des Ballons basierend auf alpha_average
-            # Falls alpha_average über einem Schwellenwert liegt, steigt der Ballon schneller
+            # Ballonbewegung basierend auf dem Alpha-Wert
             if self.alpha_average > CRITICAL_LIMIT:
-                speed = 10  # Schnellerer Anstieg bei hohem Wert
-            else:
-                speed = 2  # Normalgeschwindigkeit
+                pygame.quit()
+                return "Spiel abgebrochen! Alpha-Wert überschreitet den kritischen Limit."
 
-            y -= speed  # Ballon steigt
+            if self.alpha_average > SENSITIVITY:
+                y -= speed  # Ballon steigt
 
-            if y < 0:  # Ballon ist aus dem Bildschirm, stoppen
-                y = 0
+            # Ballon zeichnen
+            window.fill((0, 0, 0))  # Hintergrundfarbe
+            pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
+            pygame.display.update()
 
-            window.fill((0, 0, 0))  # Bildschirm löschen
-            pygame.draw.circle(window, balloon_color, (window_width // 2, y), 50)  # Ballon zeichnen
-
-            # Text anzeigen, der den aktuellen alpha_average anzeigt
-            text = font.render(f"Alpha Average: {self.alpha_average:.2f}", True, (255, 255, 255))
-            window.blit(text, (10, 10))
-
-            pygame.display.flip()
-            clock.tick(60)  # 60 FPS
+            clock.tick(60)  # FPS
 
         pygame.quit()
-        return "Spiel beendet"
+        return "Spiel beendet - Ballon erfolgreich gesteuert."
 
-# Hauptanwendung starten
+# Hauptprogramm starten
 if __name__ == "__main__":
     app = App()
     app.mainloop()
