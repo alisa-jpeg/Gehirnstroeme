@@ -2,9 +2,7 @@ muss noch gemacht werden:
 
 pygame kreis alles wieder richtig machen -- base y mus definiert werden 
 
-durchschnitt muss in erster textbox angezeigt werden
 
-konsoleneingabe muss zu tkinter werden
 
 
 

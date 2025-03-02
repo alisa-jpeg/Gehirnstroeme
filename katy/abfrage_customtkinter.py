@@ -7,6 +7,7 @@ import customtkinter as ctk #für graphiken
 import csv 
 from datetime import datetime
 import random
+import tkinter.messagebox as msgbox
 
 root = ctk.CTk()
 
@@ -28,17 +29,32 @@ ctk.set_appearance_mode("Dark")
 #größe fenster
 appWidth, appHeight = 2000, 600
 
+radio_var0 = ctk.IntVar()
+radio_var1 = ctk.IntVar()
+radio_var2 = ctk.IntVar()
+
+
+
 #App Class
 class App(ctk.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.toplevel_window = None
 #titel fenster
         self.title("Brain-Computer-Interface-Fragebogen") 
 #größe fenster auf das was zuvor festgelegt wurde
         self.geometry(f"{appWidth}x{appHeight}")
 
+        #wenn fenster geschlossen wird, danna auch das geamte programm
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        # Initialisieren der Flagge für "Daten nicht speichern"
+        self.show_only_flag = False
+
+
+
 #erstes label-überschrift
-        self.label = ctk.CTkLabel(self, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können (immer nur ein Kreuz setzen):")
+        self.label = ctk.CTkLabel(self, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können:")
         self.label.grid(row=0, column=0, columnspan=2, padx=20, pady=20, sticky="ew")
 
 #alter
@@ -52,101 +68,119 @@ class App(ctk.CTk):
         self.label = ctk.CTkLabel(self, text="Wann haben Sie das letzte mal Kaffee getrunken?")
         self.label.grid(row=2, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton1 = ctk.CTkRadioButton(self, text="Innerhalb der letzten zwei Stunden", value = 1)
+        self.RadioButton1 = ctk.CTkRadioButton(self, text="Innerhalb der letzten zwei Stunden", value = 1, variable = radio_var0)
         self.RadioButton1.grid(row=2, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton2 = ctk.CTkRadioButton(self, text="Innerhalb der letzten 12 Stunden", value = 1)
+        self.RadioButton2 = ctk.CTkRadioButton(self, text="Innerhalb der letzten 12 Stunden", value = 2, variable = radio_var0)
         self.RadioButton2.grid(row=2, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton3 = ctk.CTkRadioButton(self, text="Vor über 12 Stunden", value = 1)
+        self.RadioButton3 = ctk.CTkRadioButton(self, text="Vor über 12 Stunden", value = 3, variable = radio_var0)
         self.RadioButton3.grid(row=2, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton4 = ctk.CTkRadioButton(self, text="Ich trinke keinen Kaffee", value = 1)
+        self.RadioButton4 = ctk.CTkRadioButton(self, text="Ich trinke keinen Kaffee", value = 4, variable = radio_var0)
         self.RadioButton4.grid(row=2, column=5, columnspan=1, padx=20, pady=20, sticky="w")
 #4. label
         self.label = ctk.CTkLabel(self, text="Sind Sie links- oder rechtshändig?")
         self.label.grid(row=3, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton5 = ctk.CTkRadioButton(self, text="Ich bin linkshändig.", value = 1)
+        self.RadioButton5 = ctk.CTkRadioButton(self, text="Ich bin linkshändig.", value = 1, variable = radio_var1)
         self.RadioButton5.grid(row=3, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton6 = ctk.CTkRadioButton(self, text="Ich bin rechtshändig.", value = 1)
+        self.RadioButton6 = ctk.CTkRadioButton(self, text="Ich bin rechtshändig.", value = 2, variable = radio_var1)
         self.RadioButton6.grid(row=3, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton7 = ctk.CTkRadioButton(self, text="Ich bin beidhändig.", value = 1)
+        self.RadioButton7 = ctk.CTkRadioButton(self, text="Ich bin beidhändig.", value = 3, variable = radio_var1)
         self.RadioButton7.grid(row=3, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 #5. label
         self.label = ctk.CTkLabel(self, text="Wie müde fühlen Sie sich gerade? (1=Adrenalinschub, 10=Schlaf)")
         self.label.grid(row=4, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.slider = ctk.CTkSlider(self, from_=1, to=10, number_of_steps=10)
+        self.slider = ctk.CTkSlider(self, from_=1, to=10, number_of_steps=10, command = self.slider_event)
         self.slider.grid(row=4, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
+
+        self.label = ctk.CTkLabel(self, text="1")
+
+
+
 
 #6. label
         self.label = ctk.CTkLabel(self, text="Wie dicht/dick ist Ihr Haar?")
         self.label.grid(row=5, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton8 = ctk.CTkRadioButton(self, text="Ich habe eine Glatze.", value = 1)
+        self.RadioButton8 = ctk.CTkRadioButton(self, text="Ich habe eine Glatze.", value = 1, variable = radio_var2)
         self.RadioButton8.grid(row=5, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton9 = ctk.CTkRadioButton(self, text="Ich habe dünnes Haar.", value = 1)
+        self.RadioButton9 = ctk.CTkRadioButton(self, text="Ich habe dünnes Haar.", value = 2, variable=radio_var2)
         self.RadioButton9.grid(row=5, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton10 = ctk.CTkRadioButton(self, text="Ich habe dickes Haar.", value = 1)
+        self.RadioButton10 = ctk.CTkRadioButton(self, text="Ich habe dickes Haar.", value = 3, variable=radio_var2)
         self.RadioButton10.grid(row=5, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 
-#7. label
-        self.RadioButton11 = ctk.CTkRadioButton(self, text="Ihre Daten dürfen für unsere Zwecke verwendet werden.", value = 1)
-        self.RadioButton11.grid(row=6, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-#button zum schreiben der daten in ein dokument (später zum öffnen des hauptfensters)
-        self.generateResultsButton = ctk.CTkButton(self, text ="Daten speichern", command = self.abschluss)
-        self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")
+#button zum schreiben der daten in ein dokument
+        self.generateResultsButton = ctk.CTkButton(self, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.abschluss)
+        self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")       
+        
+         # Button für die Option keine Daten zu speichern (nur Anschauungszwecke)
+        self.showOnlyButton = ctk.CTkButton(self, text="Daten nicht speichern (nur zu Anschauungszwecken)", command=self.show_only)
+        self.showOnlyButton.grid(row=7, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
+
+
+
+
+
+    def slider_event(self, value):
+        self.label = ctk.CTkLabel(self, text=value)
+        self.label.grid(row=4, column=4, columnspan=2, padx=20, pady=20, sticky="w")
+
 
 
     def createText(self):
         #.cget("value") gibt den wert des eingabefeldes zurück
+        v0 = radio_var0.get()
+        v1 = radio_var1.get()
+        v2 = radio_var2.get()
+
 
         kaffee = ""
-        foo = self.RadioButton1.cget("value")
-        if self.RadioButton1.cget("value") == 1:
+        if v0 == 1:
             kaffee = "Innerhalb der letzten zwei Stunden"
-        elif self.RadioButton2.cget("value") == 1:
+        elif v0 == 2:
             kaffee = "Innerhalb der letzten 12 Stunden"
-        elif self.RadioButton3.cget("value") == 1:
+        elif v0  == 3:
             kaffee = "Vor über 12 Stunden"
-        elif self.RadioButton4.cget("value") == 1:
+        elif v0 == 4:
             kaffee = "Ich trinke keinen Kaffee"
         else:
             kaffee = "Keine Angabe"
 
         haendigkeit = ""
-        if self.RadioButton5.cget("value") == 1:
+        if v1 == 1:
             haendigkeit = "Ich bin linkshändig."
-        elif self.RadioButton6.cget("value") == 1:
+        elif v2 == 2:
             haendigkeit = "Ich bin rechtshändig."
-        elif self.RadioButton7.cget("value") == 1:
+        elif v1 == 3:
             haendigkeit = "Ich bin beidhändig."
         else:
             haendigkeit = "Keine Angabe"
 
         haar = ""
-        if self.RadioButton8.cget("value") == 1:
+        if v2 == 1:
             haar = "Ich habe eine Glatze."
-        elif self.RadioButton9.cget("value") == 1:
+        elif v2 == 2:
             haar = "Ich habe dünnes Haar."
-        elif self.RadioButton10.cget("value") == 1:
+        elif v2 == 3:
             haar = "Ich habe dickes Haar."
         else:
             haar = "Keine Angabe"
 
         #text-variable füllen
-        text = {"Alter": self.nameEntry.cget("value"),
+        text = {"Alter": self.nameEntry.get(),
                 "Kaffee getrunken": kaffee, 
                 "Händigkeit": haendigkeit, 
-                "Müdigkeit": self.slider.cget("value"), 
+                "Müdigkeit": self.slider.get(), 
                 "Haarlänge": haar, 
                 "Zeitstempel": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
                 "Zufallsnummer": random.randint(1000, 9999)
@@ -154,21 +188,89 @@ class App(ctk.CTk):
 
 
 
-        if self.RadioButton11.cget("value") == 0:
-            text = {"Die Person hat den Datenschutz nicht akzeptiert."}
+ 
         
 
         return text
     
+    # Validierung der Benutzereingaben
+    def validate_inputs(self):
+
+        v0 = radio_var0.get()
+        v1 = radio_var1.get()
+        v2 = radio_var2.get()
+
+        # Wenn der Benutzer "Daten nicht speichern" gewählt hat, keine Validierung erforderlich
+        if self.show_only_flag:
+            return True
+
+        try:
+            alter = int(self.nameEntry.get())
+            if alter < 1 or alter > 120:
+                raise ValueError
+        except ValueError:
+            msgbox.showerror("Fehler", "Bitte geben Sie ein gültiges Alter zwischen 1 und 120 ein.")
+            return False
+
+        if v0 == 0:
+            msgbox.showerror("Fehler", "Bitte wählen Sie eine Option für den Kaffeekonsum.")
+            return False
+
+        if v1 == 0:
+            msgbox.showerror("Fehler", "Bitte wählen Sie eine Option für Ihre Händigkeit.")
+            return False
+
+        if v2 == 0:
+            msgbox.showerror("Fehler", "Bitte wählen Sie eine Option für Ihren Haartyp.")
+            return False
+
+
+        return True
+    
     def abschluss(self):
+        if not self.validate_inputs():
+            return
         print("wir sind im abschluss")
         dateiname = "versuchsdaten.csv"
         daten = self.createText()
         daten_speichern(dateiname, daten)
-        print("Daten erfolgreich gespeichert!")
-        root.destroy()
+        msgbox.showinfo("Erfolg", "Die Daten wurden erfolgreich gespeichert.")
+        self.open_toplevel()
+    
+    def open_toplevel(self):
+            if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+                self.toplevel_window = ToplevelWindow(self) #Toplevelwindow-fenster erstellen wenn es noch nicht existiert
+                self.toplevel_window.grab_set() #fokus auf das Toplevelwindow-fenster setzen
+
+
+
+    def on_closing(self):
+        if self.toplevel_window is not None:
+            self.toplevel_window.destroy()
+        self.destroy()
+        self.quit()
+
+    # Wenn der Benutzer nur zu Anschauungszwecken arbeitet (keine Speicherung)
+    def show_only(self):
+        self.show_only_flag = True
+        msgbox.showinfo("Nur zur Ansicht", "Keine Daten werden gespeichert. Dies dient nur der Anschauung.")
+        self.show_only_flag = False
+        self.open_toplevel()
+
+
 
 # Hauptfenster der Anwendung erstellen
+
+class ToplevelWindow(ctk.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.title("Brain-Computer-Interface-Spiel")
+        self.geometry(f"{appWidth}x{appHeight}")
+        self.toplevel_window = None
+
+
+        #hierhin kommt der restliche code für das spiel
 
 
 
@@ -176,4 +278,3 @@ class App(ctk.CTk):
 if __name__ == "__main__": 
     app = App()
     app.mainloop()
-
