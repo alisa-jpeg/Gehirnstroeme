@@ -10,7 +10,7 @@ HOST = '127.0.0.1'
 PORT = 12345
 BUFFER_SIZE = 1024
 DURATION = 2  # Dauer für den UDP-Stream
-DURATION_GAME = 60 # Dauer für das Spiel
+DURATION_GAME = 10 # Dauer für das Spiel
 MAX_PACKETS = 1000
 
 
@@ -91,8 +91,8 @@ class App(ctk.CTk):
     def ballon_bewegen(self):
         #variablen festlegen
 
-        base_y = 500
-        y = base_y
+
+        y = 350
         speed = 2
         balloon_color = (0, 255, 0)  # Grün
         udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -110,14 +110,14 @@ class App(ctk.CTk):
         window = pygame.display.set_mode((window_width, window_height))
         clock = pygame.time.Clock()
         background = pygame.image.load("Hintergrundbild.png")
-        ballon = pygame.image.load("Ballon.png")
+        ballon = pygame.image.load("ballon.png")
 
-        #background=pygame.transform.scale(background,(window_width,window_height))
-        #window.blit(background,(0,0))
+        background=pygame.transform.scale(background,(window_width,window_height))
+        window.blit(background,(0,0))
 
 
-        #ballon=pygame.transform.scale(ballon,(100,100))
-        #window.blit(ballon,(window_width // 2, int(y)))
+        ballon=pygame.transform.scale(ballon,(100,200))
+        window.blit(ballon,(360, int(y)))
 
 
         running = True
@@ -151,7 +151,7 @@ class App(ctk.CTk):
 
                 if self.alpha_value < self.alpha_average:
                     y += speed #Ballon sinkt
-                pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
+                #pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
 
                 pygame.display.update()
 
