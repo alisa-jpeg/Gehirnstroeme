@@ -13,8 +13,8 @@ DURATION = 5  # Dauer für den UDP-Stream
 MAX_PACKETS = 1000
 
 # Ballon-Steuerungsparameter
-SENSITIVITY = 0.10  # 10% Anstieg → Ballon steigt
-CRITICAL_LIMIT = 0.50  # 50% Anstieg → Spielabbruch
+SENSITIVITY = 0.005  # 1% Anstieg → Ballon steigt muss im bezug auf nen laoha sein!!!!!!!!!!!!!!!!!!!!
+CRITICAL_LIMIT = 0.05  # 50% Anstieg → Spielabbruch
 
 
 class App(ctk.CTk):
@@ -113,6 +113,9 @@ class App(ctk.CTk):
 
             if self.alpha_average > SENSITIVITY:
                 y -= speed  # Ballon steigt
+
+            if self.alpha_average < SENSITIVITY:
+                y += speed #Ballon sinkt
 
             # Ballon zeichnen
             window.fill((0, 0, 0))  # Hintergrundfarbe
