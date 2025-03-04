@@ -22,7 +22,7 @@ class App(ctk.CTk):
 
         # Titel und Fenstergröße
         self.title("Brain-Computer-Interface")
-        self.geometry("1200x200")
+        self.geometry("1200x1200")
 
         # UI-Farbeinstellungen
         ctk.set_default_color_theme("green")
@@ -138,7 +138,7 @@ class App(ctk.CTk):
                 y += speed #Ballon sinkt
 
             # Ballon zeichnen
-            window.fill((0, 0, 0))  # Hintergrundfarbe
+            window.fill((10, 0, 0))  # Hintergrundfarbe
             pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
             pygame.display.update()
 
