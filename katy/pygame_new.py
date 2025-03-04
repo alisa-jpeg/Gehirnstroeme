@@ -18,6 +18,7 @@ MAX_PACKETS = 1000
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
+        self.alpha_value = 0
 
         # Titel und Fenstergröße
         self.title("Brain-Computer-Interface")
@@ -88,11 +89,29 @@ class App(ctk.CTk):
         self.displayBox2.insert("0.0", self.erfolg)
 
     def ballon_bewegen(self):
+        #variablen festlegen
+
+        base_y = 500
+        y = base_y
+        speed = 2
+        balloon_color = (0, 255, 0)  # Grün
         udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         udp_socket.bind((HOST, PORT))
         alpha_values = []
         start_time = time.time()
 
+        #pygame initialisieren
+        pygame.init()
+        window_width, window_height = 600, 800
+        window = pygame.display.set_mode((window_width, window_height))
+        clock = pygame.time.Clock()
+
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+#udp stream starten
         while time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
             try:
                 data, _ = udp_socket.recvfrom(BUFFER_SIZE)
@@ -106,22 +125,6 @@ class App(ctk.CTk):
                 print("Fehler beim Dekodieren des JSON-Pakets.")
             except Exception as e:
                 print(f"Unerwarteter Fehler: {e}")
-
-        pygame.init()
-        window_width, window_height = 600, 800
-        window = pygame.display.set_mode((window_width, window_height))
-        clock = pygame.time.Clock()
-
-        base_y = 500
-        y = base_y
-        speed = 2
-        balloon_color = (0, 255, 0)  # Grün
-
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
 
             # Ballonbewegung basierend auf dem Alpha-Wert
             if self.alpha_value > self.alpha_average*2:
