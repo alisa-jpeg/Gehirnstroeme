@@ -37,10 +37,10 @@ class App(ctk.CTk):
         self.generateResultsButton.grid(row=1, column=1, columnspan=2, padx=20, pady=20, sticky="w")
 
         self.displayBox1 = ctk.CTkTextbox(self, width=300, height=25)
-        self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="s")
+        self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.displayBox2 = ctk.CTkTextbox(self, width=300, height=25)
-        self.displayBox2.grid(row=3, column=4, columnspan=2, padx=20, pady=20, sticky="s")
+        self.displayBox2 = ctk.CTkTextbox(self, width=700, height=25)
+        self.displayBox2.grid(row=3, column=4, columnspan=5, padx=20, pady=20, sticky="w")
 
         self.generateResultsButton = ctk.CTkButton(self, text="Spiel beginnen", command=self.spiel_beginnen)
         self.generateResultsButton.grid(row=3, column=1, columnspan=2, padx=20, pady=20, sticky="w")
@@ -100,52 +100,62 @@ class App(ctk.CTk):
         alpha_values = []
         start_time = time.time()
 
+        # Ballon zeichnen
+        
+
+
         #pygame initialisieren
         pygame.init()
-        window_width, window_height = 600, 800
+        window_width, window_height = 800, 800
         window = pygame.display.set_mode((window_width, window_height))
         clock = pygame.time.Clock()
+        background = pygame.image.load("Hintergrundbild.png")
+        #screen = pygame.display.set_mode((window_width, window_height))
+
+        background=pygame.transform.scale(background,(window_width,window_height))
+        window.blit(background,(0,0))
+        
+        pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
+
 
         running = True
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-#udp stream starten
-        while time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
-            try:
-                data, _ = udp_socket.recvfrom(BUFFER_SIZE)
-                message = json.loads(data.decode('utf-8'))
+    #udp stream starten
+            while time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
+                try:
+                    data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+                    message = json.loads(data.decode('utf-8'))
 
-                if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
-                    self.alpha_value = (message["data"][2])
-                    alpha_values.append(message["data"][2])
+                    if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
+                        self.alpha_value = (message["data"][2])
+                        alpha_values.append(message["data"][2])
 
-            except json.JSONDecodeError:
-                print("Fehler beim Dekodieren des JSON-Pakets.")
-            except Exception as e:
-                print(f"Unerwarteter Fehler: {e}")
+                except json.JSONDecodeError:
+                    print("Fehler beim Dekodieren des JSON-Pakets.")
+                except Exception as e:
+                    print(f"Unerwarteter Fehler: {e}")
 
-            # Ballonbewegung basierend auf dem Alpha-Wert
-            if self.alpha_value > self.alpha_average*2:
-                pygame.quit()
-                return "Spiel abgebrochen! Alpha-Wert überschreitet das kritische Limit."
+                # Ballonbewegung basierend auf dem Alpha-Wert
+                if y >= 1200 or y <= 0:    #abbruch
+                    pygame.quit()
+                    running = False
+                    return "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang."
 
-            if self.alpha_value > self.alpha_average:
-                y -= speed  # Ballon steigt
+                if self.alpha_value > self.alpha_average:
+                    y -= speed  # Ballon steigt
 
-            if self.alpha_value < self.alpha_average:
-                y += speed #Ballon sinkt
+                if self.alpha_value < self.alpha_average:
+                    y += speed #Ballon sinkt
 
-            # Ballon zeichnen
-            window.fill((10, 0, 0))  # Hintergrundfarbe
-            pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
-            pygame.display.update()
+                pygame.display.update()
 
-            clock.tick(60)  # FPS
-        udp_socket.close()
-        pygame.quit()
-        return "Spiel beendet - Ballon erfolgreich gesteuert."
+                clock.tick(60)  # FPS
+            udp_socket.close()
+            pygame.quit()
+            return "Spiel beendet - Ballon erfolgreich gesteuert."
 
 
 # Hauptprogramm starten
