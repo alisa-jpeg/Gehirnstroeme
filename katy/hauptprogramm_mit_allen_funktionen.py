@@ -15,9 +15,11 @@ HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lau
 PORT = 12345        # Der Port, auf dem Daten empfangen werden sollen
 BUFFER_SIZE = 1024  # Die maximale Größe eines UDP-Datenpakets in Bytes
 DURATION = 2        # Die Dauer (in Sekunden), für die Daten empfangen werden
+DURATION_GAME = 10  # Die Dauer (in Sekunden), für die das Spiel läuft
 MAX_PACKETS = 1000  # Die maximale Anzahl von Paketen, die verarbeitet werden
 
 erfolg = ""
+alpha_value = 0
 
 
 
@@ -61,17 +63,6 @@ def calculate_average_alpha():
     # Berechnen des Durchschnitts der Alpha-Werte und gib ihn zurück
     # Falls keine Werte empfangen wurden, gib 0 zurück
     return sum(alpha_values) / len(alpha_values) if alpha_values else 0
-
-
-
-
-
-
-def ballon_bewegen(): 
-        # hier pygame_kreis einfügen und erfolg je nach ausgang umsetzen
-
-        return erfolg
-        
 
 
 #beginn hauptprogramm
@@ -118,25 +109,91 @@ class App(ctk.CTk):
                 self.displayBox3.insert("0.0", "UDP-Stream nicht gestartet - Bitte lassen Sie den Durchschnitt berechnen")
 
         def durchschnitt_berechnen(self):
-                self.displayBox3.delete("0.0", "200.0")
+                self.displayBox3.delete("0.0", "end")
                 self.displayBox3.insert("0.0", "UDP-Stream läuft - Bitte warten Sie einen Moment")
                 threading.Thread(target=self.alpha_anzeigen).start()
 
         def alpha_anzeigen(self):
-                text = calculate_average_alpha()
-                self.displayBox1.delete("0.0", "200.0")
-                self.displayBox1.insert("0.0", text)
-                self.displayBox3.delete("0.0", "200.0")
+                self.alpha_average = calculate_average_alpha()
+                self.displayBox1.delete("0.0", "end")
+                self.displayBox1.insert("0.0", self.alpha_average)
+                self.displayBox3.delete("0.0", "end")
                 self.displayBox3.insert("0.0", "UDP-Stream ist abgeschlossen - Das Spiel kann beginnen!")
-                alpha_average = text
 
 
         def spiel_beginnen(self):
-                self.displayBox2.delete("0.0", "200.0")
+                self.displayBox2.delete("0.0", "end")
+                erfolg = self.ballon_bewegen()
                 text = erfolg
                 self.displayBox2.insert("0.0", text)
 
+        def ballon_bewegen(self): 
+                #variablen festlegen
+                y = 350
+                speed = 3
+                udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                udp_socket.bind((HOST, PORT))
+                alpha_values = []
+                start_time = time.time()
 
+                #pygame initialisieren
+                pygame.init()
+                window_width, window_height = 800, 800
+                window = pygame.display.set_mode((window_width, window_height))
+                clock = pygame.time.Clock()
+                background = pygame.image.load("Hintergrundbild.png")
+                ballon = pygame.image.load("ballon.png")
+
+                #hintergrund festlegen
+                background=pygame.transform.scale(background,(window_width,window_height))
+                window.blit(background,(0,0))
+        
+                #ballon erstellen
+                ballon=pygame.transform.scale(ballon,(100,200))
+                window.blit(ballon,(360, int(y)))
+
+
+                running = True
+                while running:
+                        for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                        running = False
+                        #udp stream starten
+                        if time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
+                                try:
+                                        data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+                                        message = json.loads(data.decode('utf-8'))
+
+                                        if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
+                                                self.alpha_value = (message["data"][2])
+                                                alpha_values.append(message["data"][2])
+
+                                except json.JSONDecodeError:
+                                        print("Fehler beim Dekodieren des JSON-Pakets.")
+                                except Exception as e:
+                                        print(f"Unerwarteter Fehler: {e}")
+
+                                # Ballonbewegung basierend auf dem Alpha-Wert
+                                if y > window_height or y < 0:    #abbruch
+                                        pygame.quit()
+                                        return "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang."
+
+                                if self.alpha_value > self.alpha_average:
+                                        y -= speed  # Ballon steigt
+
+                                if self.alpha_value < self.alpha_average:
+                                        y += speed #Ballon sinkt
+
+                                # Hintergrund und Ballon neu zeichnen
+                                window.blit(background, (0, 0))
+                                window.blit(ballon, (360, int(y)))
+
+                                pygame.display.update()
+                                clock.tick(60)  # FPS
+
+                        udp_socket.close()
+                        pygame.quit()
+                        return "Spiel beendet - Ballon erfolgreich gesteuert."
 
 
 #initiiert die app
