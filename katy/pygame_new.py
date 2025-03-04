@@ -118,7 +118,7 @@ class App(ctk.CTk):
                 message = json.loads(data.decode('utf-8'))
 
                 if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
-                    self.alpha_value.append(message["data"][2])
+                    self.alpha_value = (message["data"][2])
                     alpha_values.append(message["data"][2])
 
             except json.JSONDecodeError:
