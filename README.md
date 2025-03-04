@@ -1,7 +1,5 @@
 muss noch gemacht werden:
 
-pygame kreis alles wieder richtig machen -- base y mus definiert werden 
-
 
 6.märz nächstes treffen
 

@@ -10,7 +10,7 @@ HOST = '127.0.0.1'
 PORT = 12345
 BUFFER_SIZE = 1024
 DURATION = 2  # Dauer für den UDP-Stream
-DURATION_GAME = 10 # Dauer für das Spiel
+DURATION_GAME = 60 # Dauer für das Spiel
 MAX_PACKETS = 1000
 
 
@@ -90,19 +90,12 @@ class App(ctk.CTk):
 
     def ballon_bewegen(self):
         #variablen festlegen
-
-
         y = 350
-        speed = 2
-        balloon_color = (0, 255, 0)  # Grün
+        speed = 3
         udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         udp_socket.bind((HOST, PORT))
         alpha_values = []
         start_time = time.time()
-
-        # Ballon zeichnen
-        
-
 
         #pygame initialisieren
         pygame.init()
@@ -112,10 +105,11 @@ class App(ctk.CTk):
         background = pygame.image.load("Hintergrundbild.png")
         ballon = pygame.image.load("ballon.png")
 
+        #hintergrund festlegen
         background=pygame.transform.scale(background,(window_width,window_height))
         window.blit(background,(0,0))
-
-
+    
+        #ballon erstellen
         ballon=pygame.transform.scale(ballon,(100,200))
         window.blit(ballon,(360, int(y)))
 
@@ -126,7 +120,7 @@ class App(ctk.CTk):
                 if event.type == pygame.QUIT:
                     running = False
     #udp stream starten
-            while time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
+            if time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
                 try:
                     data, _ = udp_socket.recvfrom(BUFFER_SIZE)
                     message = json.loads(data.decode('utf-8'))
@@ -141,9 +135,8 @@ class App(ctk.CTk):
                     print(f"Unerwarteter Fehler: {e}")
 
                 # Ballonbewegung basierend auf dem Alpha-Wert
-                if y >= 1200 or y <= 0:    #abbruch
+                if y > window_height or y < 0:    #abbruch
                     pygame.quit()
-                    running = False
                     return "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang."
 
                 if self.alpha_value > self.alpha_average:
@@ -151,14 +144,17 @@ class App(ctk.CTk):
 
                 if self.alpha_value < self.alpha_average:
                     y += speed #Ballon sinkt
-                #pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
+
+                # Hintergrund und Ballon neu zeichnen
+                window.blit(background, (0, 0))
+                window.blit(ballon, (360, int(y)))
 
                 pygame.display.update()
-
                 clock.tick(60)  # FPS
-            udp_socket.close()
-            pygame.quit()
-            return "Spiel beendet - Ballon erfolgreich gesteuert."
+
+        udp_socket.close()
+        pygame.quit()
+        return "Spiel beendet - Ballon erfolgreich gesteuert."
 
 
 # Hauptprogramm starten
