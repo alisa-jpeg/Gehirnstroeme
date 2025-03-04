@@ -10,6 +10,10 @@ import json
 import socket
 import time
 import pygame
+import csv
+from datetime import datetime
+import tkinter.messagebox as msgbox
+import random
 
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
 PORT = 12345        # Der Port, auf dem Daten empfangen werden sollen
@@ -17,6 +21,8 @@ BUFFER_SIZE = 1024  # Die maximale Größe eines UDP-Datenpakets in Bytes
 DURATION = 2        # Die Dauer (in Sekunden), für die Daten empfangen werden
 DURATION_GAME = 10  # Die Dauer (in Sekunden), für die das Spiel läuft
 MAX_PACKETS = 1000  # Die maximale Anzahl von Paketen, die verarbeitet werden
+
+root = ctk.CTk()
 
 erfolg = ""
 alpha_value = 0
@@ -92,11 +98,11 @@ class App(ctk.CTk):
 
         #erstellt text box 1 um average_alpha anzuzeigen
                 self.displayBox1 = ctk.CTkTextbox(self, width=300, height=25)
-                self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="s")
+                self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="w")
 
         #erstellt text box 2 um endergebnis anzuzeigen
-                self.displayBox2 = ctk.CTkTextbox(self, width=300, height=25)
-                self.displayBox2.grid(row=3, column=4, columnspan=2, padx=20, pady=20, sticky="s")
+                self.displayBox2 = ctk.CTkTextbox(self, width=700, height=25)
+                self.displayBox2.grid(row=3, column=4, columnspan=3, padx=20, pady=20, sticky="w")
 
 
         #erstellt button2
@@ -191,9 +197,9 @@ class App(ctk.CTk):
                                 pygame.display.update()
                                 clock.tick(60)  # FPS
 
-                        udp_socket.close()
-                        pygame.quit()
-                        return "Spiel beendet - Ballon erfolgreich gesteuert."
+                udp_socket.close()
+                pygame.quit()
+                return "Spiel beendet - Ballon erfolgreich gesteuert."
 
 
 #initiiert die app
