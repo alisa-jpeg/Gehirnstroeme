@@ -110,12 +110,14 @@ class App(ctk.CTk):
         window = pygame.display.set_mode((window_width, window_height))
         clock = pygame.time.Clock()
         background = pygame.image.load("Hintergrundbild.png")
-        #screen = pygame.display.set_mode((window_width, window_height))
+        ballon = pygame.image.load("Ballon.png")
 
         background=pygame.transform.scale(background,(window_width,window_height))
         window.blit(background,(0,0))
-        
-        pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
+
+        #pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
+        ballon=pygame.transform.scale(ballon,(40,40))
+        window.blit(ballon,(window_width // 2, int(y)))
 
 
         running = True
