@@ -9,12 +9,10 @@ import pygame
 HOST = '127.0.0.1'
 PORT = 12345
 BUFFER_SIZE = 1024
-DURATION = 5  # Dauer für den UDP-Stream
+DURATION = 2  # Dauer für den UDP-Stream
+DURATION_GAME = 60 # Dauer für das Spiel
 MAX_PACKETS = 1000
 
-# Ballon-Steuerungsparameter
-SENSITIVITY = 0.005  # 1% Anstieg → Ballon steigt muss im bezug auf nen laoha sein!!!!!!!!!!!!!!!!!!!!
-CRITICAL_LIMIT = 0.05  # 50% Anstieg → Spielabbruch
 
 
 class App(ctk.CTk):
@@ -90,6 +88,25 @@ class App(ctk.CTk):
         self.displayBox2.insert("0.0", self.erfolg)
 
     def ballon_bewegen(self):
+        udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        udp_socket.bind((HOST, PORT))
+        alpha_values = []
+        start_time = time.time()
+
+        while time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
+            try:
+                data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+                message = json.loads(data.decode('utf-8'))
+
+                if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
+                    self.alpha_value.append(message["data"][2])
+                    alpha_values.append(message["data"][2])
+
+            except json.JSONDecodeError:
+                print("Fehler beim Dekodieren des JSON-Pakets.")
+            except Exception as e:
+                print(f"Unerwarteter Fehler: {e}")
+
         pygame.init()
         window_width, window_height = 600, 800
         window = pygame.display.set_mode((window_width, window_height))
@@ -107,14 +124,14 @@ class App(ctk.CTk):
                     running = False
 
             # Ballonbewegung basierend auf dem Alpha-Wert
-            if self.alpha_average > CRITICAL_LIMIT:
+            if self.alpha_value > self.alpha_average*2:
                 pygame.quit()
-                return "Spiel abgebrochen! Alpha-Wert überschreitet den kritischen Limit."
+                return "Spiel abgebrochen! Alpha-Wert überschreitet das kritische Limit."
 
-            if self.alpha_average > SENSITIVITY:
+            if self.alpha_value > self.alpha_average:
                 y -= speed  # Ballon steigt
 
-            if self.alpha_average < SENSITIVITY:
+            if self.alpha_value < self.alpha_average:
                 y += speed #Ballon sinkt
 
             # Ballon zeichnen
@@ -123,9 +140,10 @@ class App(ctk.CTk):
             pygame.display.update()
 
             clock.tick(60)  # FPS
-
+        udp_socket.close()
         pygame.quit()
         return "Spiel beendet - Ballon erfolgreich gesteuert."
+
 
 # Hauptprogramm starten
 if __name__ == "__main__":

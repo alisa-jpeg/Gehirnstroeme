@@ -106,17 +106,16 @@ class App(ctk.CTk):
                 if event.type == pygame.QUIT:
                     running = False
 
-            # Hier bestimmen wir die Geschwindigkeit des Ballons basierend auf alpha_average
-            # Falls alpha_average über einem Schwellenwert liegt, steigt der Ballon schneller
-            if self.alpha_average > CRITICAL_LIMIT:
-                speed = 10  # Schnellerer Anstieg bei hohem Wert
-            else:
-                speed = 2  # Normalgeschwindigkeit
+            # Ballonbewegung basierend auf dem Alpha-Wert
+            if self.alpha_average > self.alpha_average*2:
+                pygame.quit()
+                return "Spiel abgebrochen! Alpha-Wert überschreitet das kritische Limit."
 
-            y -= speed  # Ballon steigt
+            if self.alpha_average > self.alpha_average:
+                y -= speed  # Ballon steigt
 
-            if y < 0:  # Ballon ist aus dem Bildschirm, stoppen
-                y = 0
+            if self.alpha_average < self.alpha_average:
+                y += speed #Ballon sinkt
 
             window.fill((0, 0, 0))  # Bildschirm löschen
             pygame.draw.circle(window, balloon_color, (window_width // 2, y), 50)  # Ballon zeichnen
