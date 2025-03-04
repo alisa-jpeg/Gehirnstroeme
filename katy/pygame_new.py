@@ -115,7 +115,7 @@ class App(ctk.CTk):
         #background=pygame.transform.scale(background,(window_width,window_height))
         #window.blit(background,(0,0))
 
-        pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
+
         #ballon=pygame.transform.scale(ballon,(100,100))
         #window.blit(ballon,(window_width // 2, int(y)))
 
@@ -151,6 +151,7 @@ class App(ctk.CTk):
 
                 if self.alpha_value < self.alpha_average:
                     y += speed #Ballon sinkt
+                pygame.draw.circle(window, balloon_color, (window_width // 2, int(y)), 20)  # Ballon
 
                 pygame.display.update()
 
