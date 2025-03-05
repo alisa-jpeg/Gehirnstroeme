@@ -368,7 +368,7 @@ class ToplevelWindow(ctk.CTkToplevel):
     def ballon_bewegen(self): 
         #variablen festlegen
                 y = 350
-                speed = 3 
+                speed = 1 
                 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 udp_socket.bind((HOST, PORT))
                 alpha_values = []
@@ -428,6 +428,9 @@ class ToplevelWindow(ctk.CTkToplevel):
 
                                 pygame.display.update()
                                 clock.tick(60)  # FPS
+
+                        else:
+                             running=False
 
                 udp_socket.close()
                 pygame.quit()

@@ -1,5 +1,9 @@
 muss noch gemacht werden:
 
+(-pygame fenster im vordergrund)
+
+-schwierigkeitsgrad einstellbar machen-- einfacher machen
+
 -3-2-1 bevor spiel beginnt?
 
 -alpha-wert anzeigen?
