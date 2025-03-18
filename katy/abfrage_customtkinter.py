@@ -280,39 +280,49 @@ def calculate_average_alpha():
     # Erstelle einen UDP-Socket, um Daten zu empfangen
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    # Binden des Sockets an die konfigurierte IP-Adresse und den Port
+    # Binden des Sockets an eine spezifische IP-Adresse und einen Port (PORT)
+    # Dadurch kann der Socket ankommende UDP Pakete von anderen Geräten oder Programmen empfangen und die Daten an diese Adresse senden.
+    
     udp_socket.bind((HOST, PORT))
 
-    # Liste zum Speichern der empfangenen Alpha-Werte
+    # Initialisiert eine Liste, um die empfangenen Alpha-Werte zu speichern. Dabei werden die Alpha Werte aus den empfangenen JSON Daten extrahiert.
     alpha_values = []
 
-    # Startzeit, um die Empfangsdauer zu überwachen
+    # Die Schleife läuft solange, bis die maximale Empfangsdauer (DURATION) erreicht ist oder die maximale Anzahl an Paketen (MAX_PACKETS) empfangen wurde. 
     start_time = time.time()
   
     while time.time() - start_time < DURATION and len(alpha_values) < MAX_PACKETS:
         try:
-            # Empfang eines Datenpakets
+            # Wartet auf den Empfang eines Datenpakets mit einer maximalen Größe von BUFFER_SIZE Bytes. recfrom gibt die empfangenen Daten und die Absenderadresse zurück.
+          
             data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+            #Dekodiert das empfangene JSON-Format in ein Python Objekt
+            
             message = json.loads(data.decode('utf-8'))
             alpha_values.append(message["data"][2])
 
-            # Prüfe, ob "data" vorhanden ist und genügend Elemente enthält
+            #Prüft, ob die empfangenen Daten die erwartete Struktur besitzen. Die Datenstruktur enthält ein "data"-Feld, das eine Liste ist.
             if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
+
+                #Extrahiert den Wert aus der Liste und speichert ihn in der Liste Alpha Values.
                 alpha_values.append(message["data"][2])
             else:
+                #falls das empfangene Paket nicht die erwartete Struktur hat, wird ungültiges Paket ausgegeben. 
                 print("Ungültiges Paket erhalten:", message)
 
         except json.JSONDecodeError:
+            #falls das empfangene Datenpaket keine gültige JSON-Struktur hat, wird ein Fehler ausgegeben. 
             print("Fehler beim Dekodieren des JSON-Pakets.")
         except Exception as e:
+            #fange alle unerwarteten fehler ab und gebe die Fehlermeldung aus.
             print(f"Unerwarteter Fehler: {e}")
 
-            # Schließen des UDP-Socket, da er nicht mehr benötigt wird
+    #Nachdem die Empfangsschleife beendet ist, wird der UDP-Socket geschlossen.
     udp_socket.close()
 
 
-    # Berechnen des Durchschnitts der Alpha-Werte und gib ihn zurück
-    # Falls keine Werte empfangen wurden, gib 0 zurück
+    #Berechnen des Durchschnitts der Alpha-Werte und wird zurückgegeben.
+    # Falls keine Werte empfangen wurden, wird 0 zurückgegeben.
     return sum(alpha_values) / len(alpha_values) if alpha_values else 0
 
 
@@ -367,71 +377,80 @@ class ToplevelWindow(ctk.CTkToplevel):
         self.displayBox2.insert("0.0", text)
 
     def ballon_bewegen(self): 
-        #variablen festlegen
+        #Variablen für die Ballpostion und Geschwindigkeit festlegen
                 y = 350
                 speed = 1 
+        #UDP socket für den Empfang von Alpha-Werten einrichten
                 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 udp_socket.bind((HOST, PORT))
-                alpha_values = []
-                start_time = time.time()
+        
+                alpha_values = [] #Liste zur Speicherung der empfangegen Alpha-Werte
+                start_time = time.time() #Startzeit des Spiels speichern
 
                 #pygame initialisieren
                 pygame.init()
-                window_width, window_height = 825, 800
-                window = pygame.display.set_mode((window_width, window_height))
-                clock = pygame.time.Clock()
+                window_width, window_height = 825, 800 #Fenstergröße definieren
+                window = pygame.display.set_mode((window_width, window_height)) #Fenster erstellen
+               
+                clock = pygame.time.Clock() #Pygame-Uhr zur Steuerung der FPS (Frames per Second) um die Bildwiedergabe zu kontrollieren
+
+                #Hintergrund laden und auf die Fenstergröße skalieren
                 background = pygame.image.load("Hintergrundbild.png")
                 ballon = pygame.image.load("ballon.png")
 
-                #hintergrund festlegen
                 background=pygame.transform.scale(background,(window_width,window_height))
                 window.blit(background,(0,0))
         
-                #ballon erstellen
+                #Ballonbild laden und skalieren
                 ballon=pygame.transform.scale(ballon,(100,200))
                 window.blit(ballon,(360, int(y)))
 
-
+                #Spielschleife läuft 
                 running = True
                 while running:
+                    #Verarbeitung von Benutzereingaben
                         for event in pygame.event.get():
                                 if event.type == pygame.QUIT:
                                         running = False
-                        #udp stream starten
+                        #udp stream starten, solange spiel läuft und genug pakete empfangen wurden 
                         if time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
                                 try:
+                                    #ALpha-Wert über UDP empfangen
                                         data, _ = udp_socket.recvfrom(BUFFER_SIZE)
                                         message = json.loads(data.decode('utf-8'))
 
+                                    #Prüfen ob das empfangene Paket gültig ist und die Daten enthält
                                         if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
-                                                self.alpha_value = (message["data"][2])
-                                                alpha_values.append(message["data"][2])
+                                                self.alpha_value = (message["data"][2]) #Wert aus Liste speichern
+                                                alpha_values.append(message["data"][2]) #Wert zur Liste hinzufügen
 
                                 except json.JSONDecodeError:
-                                        print("Fehler beim Dekodieren des JSON-Pakets.")
+                                        print("Fehler beim Dekodieren des JSON-Pakets.") #Falls JSON fehlerhaft ist
+                                    
                                 except Exception as e:
-                                        print(f"Unerwarteter Fehler: {e}")
+                                        print(f"Unerwarteter Fehler: {e}") #allgemeiner fehlerfall
 
-                                # Ballonbewegung basierend auf dem Alpha-Wert
-                                if y > window_height or y < 100:    #abbruch
+                                #Prüfen ob Ballon außerhalb des Spielfeldes ist
+                                if y > window_height or y < 100:    #Falls aus sichtbaren Bereich fliegt-Abbruch
                                         pygame.quit()
-                                        return "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang."
-
-                                if self.alpha_value > self.alpha_average:
+                                    return "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang."
+                               
+                            #Ballon Bewegung basierend auf Alpha-Wert
+                                if self.alpha_value > self.alpha_average: #Wenn Alpha-Wert größer als Durchschnitt ist
                                         y -= speed  # Ballon steigt
 
-                                if self.alpha_value < self.alpha_average:
+                                if self.alpha_value < self.alpha_average: #Wenn Alpha-Wert kleiner als Durchschnitt ist
                                         y += speed #Ballon sinkt
 
                                 # Hintergrund und Ballon neu zeichnen
                                 window.blit(background, (0, 0))
                                 window.blit(ballon, (360, int(y)))
 
-                                pygame.display.update()
-                                clock.tick(60)  # FPS
+                                pygame.display.update() #Anzeige aktualisieren
+                                clock.tick(60)  # Spielgeschwindigkeit auf 60 FPS begrenzen
 
                         else:
-                             running=False
+                             running=False #Wenn Zeit abgelaufen ist oder genug Pakete empfangen wurden, Spiel beenden
 
                 udp_socket.close()
                 pygame.quit()
