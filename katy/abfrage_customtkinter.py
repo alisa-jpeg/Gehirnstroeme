@@ -377,7 +377,7 @@ class ToplevelWindow(ctk.CTkToplevel):
 
                 #pygame initialisieren
                 pygame.init()
-                window_width, window_height = 800, 800
+                window_width, window_height = 825, 800
                 window = pygame.display.set_mode((window_width, window_height))
                 clock = pygame.time.Clock()
                 background = pygame.image.load("Hintergrundbild.png")
