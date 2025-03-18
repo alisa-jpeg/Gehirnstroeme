@@ -1,5 +1,7 @@
 muss noch gemacht werden:
 
+Spiel beginnen-Knopf kann nicht gedrückt werden, während udp stream läuft
+
 (-pygame fenster im vordergrund)
 
 -schwierigkeitsgrad einstellbar machen-- einfacher machen
