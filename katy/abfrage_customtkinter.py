@@ -1,8 +1,4 @@
-#zeitpunkt, zufällige nummer und daten in pdf datei schreiben
-#nur ein kreuz möglich machen
-#bei slider zahl anzeigen
 
-#nötige dinge importieren
 
 #nötige dinge importieren
 import threading
