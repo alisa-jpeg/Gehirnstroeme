@@ -273,7 +273,7 @@ class App(ctk.CTk):
 
 # Funktion zur Berechnung des Durchschnitts der Alpha-Werte
 def calculate_average_alpha():
-    # Erstelle einen UDP-Socket, um Daten zu empfangen
+    # Erstelle einen UDP-Socket, um Daten zu empfangen.AF_INET bezeichnet hierbei Adress-Family-Inzternet” das bedeutet, dass wir einen IPv4-Socket erstellen (für IP-Adressen der Form XXX.XXX.X.X).
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     # Binden des Sockets an eine spezifische IP-Adresse und einen Port (PORT)
@@ -289,7 +289,8 @@ def calculate_average_alpha():
   
     while time.time() - start_time < DURATION and len(alpha_values) < MAX_PACKETS:
         try:
-            # Wartet auf den Empfang eines Datenpakets mit einer maximalen Größe von BUFFER_SIZE Bytes. recfrom gibt die empfangenen Daten und die Absenderadresse zurück.
+            # Wartet auf den Empfang eines Datenpakets mit einer maximalen Größe von BUFFER_SIZE Bytes. Da UDP verbindungslos ist, muss jedes Paket einzeln verarbeitet werden. recvfrom() gibt daher normalerweise die empfangenen Daten, sowie auch die Adresse (IP + Port) des Absenders zurück, damit man weiß, von wem das Paket kam. In unserem Code wird diese Adresse jedoch mit _ ignoriert, weil sie für die Verarbeitung nicht benötigt wird. Es ist dennoch notwendig es zu integrieren, da  Python eine exakte Anzahl an Variablen für Rückgabewerte erwartet.Deshalb muss die Adresse auch dann erfasst werden, wenn man sie nicht braucht, weilrecvfrom()ein Tupel (data, addr) zurückgibt.Ohne eine zweite Variable würde es zu einem Fehler kommen.
+
           
             data, _ = udp_socket.recvfrom(BUFFER_SIZE)
             #Dekodiert das empfangene JSON-Format in ein Python Objekt
