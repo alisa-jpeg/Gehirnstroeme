@@ -13,9 +13,6 @@ import random
 import tkinter.messagebox as msgbox
 
 
-root = ctk.CTk()
-
-
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
 PORT = 12345        # Der Port, auf dem Daten empfangen werden sollen
 BUFFER_SIZE = 1024  # Die maximale Größe eines UDP-Datenpakets in Bytes
