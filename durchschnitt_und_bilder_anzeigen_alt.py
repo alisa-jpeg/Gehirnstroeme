@@ -20,7 +20,6 @@ SCHWARZ = (0,0,0)
 WEISS = (255, 255, 255)
 GRAU = (155, 155, 155)
 spielaktiv = True
-frame = 0
 
 # Konfiguration der Netzwerkparameter
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
