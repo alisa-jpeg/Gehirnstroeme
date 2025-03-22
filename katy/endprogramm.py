@@ -1,5 +1,3 @@
-
-
 #nötige dinge importieren
 import threading
 import json
@@ -50,8 +48,8 @@ radio_var2 = ctk.IntVar()
 
 #App Class
 class App(ctk.CTk):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, root):
+        super().__init__(root)
         self.toplevel_window = None
 #titel fenster
         self.title("Brain-Computer-Interface-Fragebogen") 
@@ -461,5 +459,5 @@ class ToplevelWindow(ctk.CTkToplevel):
 
 #initiiert die app
 if __name__ == "__main__": 
-    app = App()
-    app.mainloop()
+    #app = App()
+    root.mainloop()
