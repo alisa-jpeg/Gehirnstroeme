@@ -37,8 +37,8 @@ ctk.set_default_color_theme("green")
 ctk.set_appearance_mode("Dark") 
 
 #größe fenster
-appWidth= 2000
-appHeight = 600
+appWidth= 1585
+appHeight = 515
 
 radio_var0 = ctk.IntVar()
 radio_var1 = ctk.IntVar()
@@ -320,7 +320,7 @@ class App(ctk.CTk):
     def ballon_bewegen(self): 
         #Variablen für die Ballpostion und Geschwindigkeit festlegen
                 y = 350
-                speed = 1 
+                speed = 5
         #UDP socket für den Empfang von Alpha-Werten einrichten
                 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 udp_socket.bind((HOST, PORT))
@@ -373,10 +373,11 @@ class App(ctk.CTk):
                             print(f"Unerwarteter Fehler: {e}") #allgemeiner fehlerfall
 
                         #Prüfen ob Ballon außerhalb des Spielfeldes ist
-                        if y > window_height or y < 100:    #Falls aus sichtbaren Bereich fliegt-Abbruch
+                        if y > 700 or y < 50:    #Falls aus sichtbaren Bereich fliegt-Abbruch
                             ballon=pygame.transform.scale(zerplatzt,(100,200)) #ballon ersetzen durch zerplatzten ballon
-                            window.blit(zerplatzt,(360, int(y)))
-                            time.sleep(5) #5 Sekunden warten
+                            window.blit(ballon,(360, int(y)))
+                            pygame.display.update()
+                            time.sleep(2) #5 Sekunden warten
                             pygame.quit()
                             return "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang."
                                
