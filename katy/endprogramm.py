@@ -50,7 +50,6 @@ radio_var2 = ctk.IntVar()
 class App(ctk.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.toplevel_window = None
 
         self.frame_list = [] #Liste für die Frames
 
@@ -59,8 +58,6 @@ class App(ctk.CTk):
 #größe fenster auf das was zuvor festgelegt wurde
         self.geometry(f"{appWidth}x{appHeight}")
 
-        #wenn fenster geschlossen wird, danna auch das geamte programm
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         # Initialisieren der Flagge für "Daten nicht speichern"
         self.show_only_flag = False
@@ -73,7 +70,7 @@ class App(ctk.CTk):
 
 
 #erstes label-überschrift
-        self.label = ctk.CTkLabel(self.frame1, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können:") # self,
+        self.label = ctk.CTkLabel(self.frame1, text="Bitte füllen Sie vor Beginn des Spiels diesen Fragebogen aus, damit wir Ihre Daten auswerten können:")
         self.label.grid(row=0, column=0, padx=20, pady=20, columnspan=2,  sticky="ew")
 
 #alter
@@ -151,26 +148,34 @@ class App(ctk.CTk):
 
         #2. frame
 
+        #spielerklärung
+
+        self.label = ctk.CTkLabel(self.frame2, text="Spielanleitung: \n\nIn diesem Spiel steuern Sie einen Ballon, indem Sie Ihre Gehirnaktivität (Alpha-Wellen), die von dem EEG gemessen wird, verwenden. \n\n Je mehr Alpha-Wellen das EEG empfängt, desto entspannter sind Sie, einfach gesagt. \n\nIhr Ziel ist es, den Ballon in der Luft zu halten, indem Sie Ihre Alpha-Wellen steuern, indem Sie sich entspannen oder nicht. \n\nWenn Ihr Alpha-Wert über dem Durchschnitt liegt, Sie also sehr entspannt sind, steigt der Ballon. Wenn er darunter liegt, Sie also sehr aufgeregt sind, sinkt der Ballon. \n\nDas Spiel dauert 60 Sekunden. Viel Spaß!")
+        self.label.grid(row=0, column=0, columnspan=10, padx=20, pady=20, sticky="w")
+
         self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
-        self.generateResultsButton.grid(row=1, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
+        self.generateResultsButton.grid(row=5, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt text box 1 um average_alpha anzuzeigen
         self.displayBox1 = ctk.CTkTextbox(self.frame2, width=300, height=25)
-        self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="w")
+        self.displayBox1.grid(row=5, column=4, columnspan=2, padx=20, pady=20, sticky="w")
 
         #erstellt text box 2 um endergebnis anzuzeigen
         self.displayBox2 = ctk.CTkTextbox(self.frame2, width=700, height=25)
-        self.displayBox2.grid(row=3, column=4, columnspan=3, padx=20, pady=20, sticky="w")
-
+        self.displayBox2.grid(row=6, column=4, columnspan=3, padx=20, pady=20, sticky="w")
 
         #erstellt button2
         self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", command = self.spiel_beginnen)
-        self.generateResultsButton.grid(row=3, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
+        self.generateResultsButton.grid(row=6, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt textfeld, damit man sieht ob udp-stream läuft
         self.displayBox3 = ctk.CTkTextbox(self.frame2, width=500, height=25)
-        self.displayBox3.grid(row=1, column=6, columnspan=2, padx=20, pady=20, sticky="w")
+        self.displayBox3.grid(row=5, column=6, columnspan=2, padx=20, pady=20, sticky="w")
         self.displayBox3.insert("0.0", "UDP-Stream nicht gestartet - Bitte lassen Sie den Durchschnitt berechnen")
+
+        #schließen des fensters
+        self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Schließen", command = self.quit)
+        self.generateResultsButton.grid(row=7, column = 0, columnspan = 10, padx = 20, pady=20, sticky ="ew")       
 
         self.frame1.tkraise()
 
@@ -281,12 +286,6 @@ class App(ctk.CTk):
         self.forward()
     
 
-    def on_closing(self):
-        if self.toplevel_window is not None:
-            self.toplevel_window.destroy()
-        self.destroy()
-        self.quit()
-
     # Wenn der Benutzer nur zu Anschauungszwecken arbeitet (keine Speicherung)
     def show_only(self):
         self.show_only_flag = True
@@ -312,10 +311,27 @@ class App(ctk.CTk):
 
 
     def spiel_beginnen(self):
+        self.label = ctk.CTkLabel(self.frame2, text="3...")
+        self.label.grid(row=8, column=0, columnspan=2, padx=20, pady=20, sticky="w")
+        self.after(1000, self.update_label, "2...")
+    
+    def update_label(self, text):
+        self.label.configure(text=text)
+        if text == "2...":
+            self.after(1000, self.update_label, "1...")
+        elif text == "1...":
+            self.after(1000, self.update_label, "Los!")
+        elif text == "Los!":
+            self.after(1000, self.start_game)
+
+    def start_game(self):
         self.displayBox2.delete("0.0", "end")
         erfolg = self.ballon_bewegen()
         text = erfolg
         self.displayBox2.insert("0.0", text)
+        self.label.configure(text="")
+
+
 
     def ballon_bewegen(self): 
         #Variablen für die Ballpostion und Geschwindigkeit festlegen
@@ -349,10 +365,12 @@ class App(ctk.CTk):
 
                 #Spielschleife läuft 
                 running = True
+                game_aborted = False
                 while running:
                     #Verarbeitung von Benutzereingaben
                     for event in pygame.event.get():
                             if event.type == pygame.QUIT:
+                                game_aborted = True
                                 running = False
                     #udp stream starten, solange spiel läuft und genug pakete empfangen wurden 
                     if time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
@@ -400,7 +418,10 @@ class App(ctk.CTk):
 
                 udp_socket.close()
                 pygame.quit()
-                return "Spiel beendet - Ballon erfolgreich gesteuert."
+                if game_aborted:
+                    return "Spiel abgebrochen! Das Fenster wurde geschlossen."
+                else:
+                    return "Spiel beendet - Ballon erfolgreich gesteuert."
 
 
 
