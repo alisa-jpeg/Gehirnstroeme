@@ -10,7 +10,6 @@ from datetime import datetime
 import random
 import tkinter.messagebox as msgbox
 
-
 HOST = '127.0.0.1'  # Die IP-Adresse des lokalen Hosts, auf dem das Programm lauscht
 PORT = 12345        # Der Port, auf dem Daten empfangen werden sollen
 BUFFER_SIZE = 1024  # Die maximale Größe eines UDP-Datenpakets in Bytes
@@ -66,85 +65,85 @@ class App(ctk.CTk):
         # Initialisieren der Flagge für "Daten nicht speichern"
         self.show_only_flag = False
 
-        frame1 = ctk.CTkFrame(self)
-        frame2 = ctk.CTkFrame(self)
+        self.frame1 = ctk.CTkFrame(self)
+        self.frame2 = ctk.CTkFrame(self)
 
-        frame1.grid(row=0, column=0, padx=2000, pady=600, sticky="ew")
-        frame2.grid(row=0, column=0, padx=2000, pady=600, sticky="ew")
+        self.frame1.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
+        self.frame2.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
 
 
 #erstes label-überschrift
-        self.label = ctk.CTkLabel(frame1, self, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können:")
-        self.label.grid(row=0, column=0, columnspan=2, padx=20, pady=20, sticky="ew")
+        self.label = ctk.CTkLabel(self.frame1, text="Bitte füllen Sie vor Beginn der Messungen diesen Fragebogen aus, damit wir Ihre Daten auswerten können:") # self,
+        self.label.grid(row=0, column=0, padx=20, pady=20, columnspan=2,  sticky="ew")
 
 #alter
-        self.label = ctk.CTkLabel(frame1, self, text="Was ist Ihr Alter?")
+        self.label = ctk.CTkLabel(self.frame1, text="Was ist Ihr Alter?")
         self.label.grid(row=1, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.nameEntry = ctk.CTkEntry(frame1, self)
+        self.nameEntry = ctk.CTkEntry(self.frame1)
         self.nameEntry.grid(row=1, column=2, columnspan=2, padx=20, pady=20, sticky="ew")   
 
 #3. label
-        self.label = ctk.CTkLabel(frame1, self, text="Wann haben Sie das letzte mal Kaffee getrunken?")
+        self.label = ctk.CTkLabel(self.frame1, text="Wann haben Sie das letzte mal Kaffee getrunken?")
         self.label.grid(row=2, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton1 = ctk.CTkRadioButton(frame1, self, text="Innerhalb der letzten zwei Stunden", value = 1, variable = radio_var0)
+        self.RadioButton1 = ctk.CTkRadioButton(self.frame1, text="Innerhalb der letzten zwei Stunden", value = 1, variable = radio_var0)
         self.RadioButton1.grid(row=2, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton2 = ctk.CTkRadioButton(frame1, self, text="Innerhalb der letzten 12 Stunden", value = 2, variable = radio_var0)
+        self.RadioButton2 = ctk.CTkRadioButton(self.frame1, text="Innerhalb der letzten 12 Stunden", value = 2, variable = radio_var0)
         self.RadioButton2.grid(row=2, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton3 = ctk.CTkRadioButton(frame1, self, text="Vor über 12 Stunden", value = 3, variable = radio_var0)
+        self.RadioButton3 = ctk.CTkRadioButton(self.frame1, text="Vor über 12 Stunden", value = 3, variable = radio_var0)
         self.RadioButton3.grid(row=2, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton4 = ctk.CTkRadioButton(frame1, self, text="Ich trinke keinen Kaffee", value = 4, variable = radio_var0)
+        self.RadioButton4 = ctk.CTkRadioButton(self.frame1, text="Ich trinke keinen Kaffee", value = 4, variable = radio_var0)
         self.RadioButton4.grid(row=2, column=5, columnspan=1, padx=20, pady=20, sticky="w")
 #4. label
-        self.label = ctk.CTkLabel(frame1, self, text="Sind Sie links- oder rechtshändig?")
+        self.label = ctk.CTkLabel(self.frame1, text="Sind Sie links- oder rechtshändig?")
         self.label.grid(row=3, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton5 = ctk.CTkRadioButton(frame1, self, text="Ich bin linkshändig.", value = 1, variable = radio_var1)
+        self.RadioButton5 = ctk.CTkRadioButton(self.frame1, text="Ich bin linkshändig.", value = 1, variable = radio_var1)
         self.RadioButton5.grid(row=3, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton6 = ctk.CTkRadioButton(frame1, self, text="Ich bin rechtshändig.", value = 2, variable = radio_var1)
+        self.RadioButton6 = ctk.CTkRadioButton(self.frame1, text="Ich bin rechtshändig.", value = 2, variable = radio_var1)
         self.RadioButton6.grid(row=3, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton7 = ctk.CTkRadioButton(frame1, self, text="Ich bin beidhändig.", value = 3, variable = radio_var1)
+        self.RadioButton7 = ctk.CTkRadioButton(self.frame1, text="Ich bin beidhändig.", value = 3, variable = radio_var1)
         self.RadioButton7.grid(row=3, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 #5. label
-        self.label = ctk.CTkLabel(frame1, self, text="Wie müde fühlen Sie sich gerade? (1=Adrenalinschub, 10=Schlaf)")
+        self.label = ctk.CTkLabel(self.frame1, text="Wie müde fühlen Sie sich gerade? (1=Adrenalinschub, 10=Schlaf)")
         self.label.grid(row=4, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.slider = ctk.CTkSlider(frame1, self, from_=1, to=10, number_of_steps=10, command = self.slider_event)
+        self.slider = ctk.CTkSlider(self.frame1, from_=1, to=10, number_of_steps=10, command = self.slider_event)
         self.slider.grid(row=4, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
 
-        self.label = ctk.CTkLabel(frame1, self, text="1")
+        self.label = ctk.CTkLabel(self.frame1, text="1")
 
 
 
 
 #6. label
-        self.label = ctk.CTkLabel(frame1, self, text="Wie dicht/dick ist Ihr Haar?")
+        self.label = ctk.CTkLabel(self.frame1, text="Wie dicht/dick ist Ihr Haar?")
         self.label.grid(row=5, column=0, columnspan=2, padx=20, pady=20, sticky="w")
 
-        self.RadioButton8 = ctk.CTkRadioButton(frame1, self, text="Ich habe eine Glatze.", value = 1, variable = radio_var2)
+        self.RadioButton8 = ctk.CTkRadioButton(self.frame1, text="Ich habe eine Glatze.", value = 1, variable = radio_var2)
         self.RadioButton8.grid(row=5, column=2, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton9 = ctk.CTkRadioButton(frame1, self, text="Ich habe dünnes Haar.", value = 2, variable=radio_var2)
+        self.RadioButton9 = ctk.CTkRadioButton(self.frame1, text="Ich habe dünnes Haar.", value = 2, variable=radio_var2)
         self.RadioButton9.grid(row=5, column=3, columnspan=1, padx=20, pady=20, sticky="w")
 
-        self.RadioButton10 = ctk.CTkRadioButton(frame1, self, text="Ich habe dickes Haar.", value = 3, variable=radio_var2)
+        self.RadioButton10 = ctk.CTkRadioButton(self.frame1, text="Ich habe dickes Haar.", value = 3, variable=radio_var2)
         self.RadioButton10.grid(row=5, column=4, columnspan=1, padx=20, pady=20, sticky="w")
 
 
 
 #button zum schreiben der daten in ein dokument
-        self.generateResultsButton = ctk.CTkButton(frame1, self, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.abschluss)
+        self.generateResultsButton = ctk.CTkButton(self.frame1, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.abschluss)
         self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")       
         
          # Button für die Option keine Daten zu speichern (nur Anschauungszwecke)
-        self.showOnlyButton = ctk.CTkButton(frame1, self, text="Daten nicht speichern (nur zu Anschauungszwecken)", command=self.show_only)
+        self.showOnlyButton = ctk.CTkButton(self.frame1, text="Daten nicht speichern (nur zu Anschauungszwecken)", command=self.show_only)
         self.showOnlyButton.grid(row=7, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
 
 
@@ -152,34 +151,37 @@ class App(ctk.CTk):
 
         #2. frame
 
-        self.generateResultsButton = ctk.CTkButton(frame2, self, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
+        self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
         self.generateResultsButton.grid(row=1, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt text box 1 um average_alpha anzuzeigen
-        self.displayBox1 = ctk.CTkTextbox(frame2, self, width=300, height=25)
+        self.displayBox1 = ctk.CTkTextbox(self.frame2, width=300, height=25)
         self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="w")
 
         #erstellt text box 2 um endergebnis anzuzeigen
-        self.displayBox2 = ctk.CTkTextbox(frame2, self, width=700, height=25)
+        self.displayBox2 = ctk.CTkTextbox(self.frame2, width=700, height=25)
         self.displayBox2.grid(row=3, column=4, columnspan=3, padx=20, pady=20, sticky="w")
 
 
         #erstellt button2
-        self.generateResultsButton = ctk.CTkButton(frame2, self, text = "Spiel beginnen", command = self.spiel_beginnen)
+        self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", command = self.spiel_beginnen)
         self.generateResultsButton.grid(row=3, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt textfeld, damit man sieht ob udp-stream läuft
-        self.displayBox3 = ctk.CTkTextbox(frame2, self, width=500, height=25)
+        self.displayBox3 = ctk.CTkTextbox(self.frame2, width=500, height=25)
         self.displayBox3.grid(row=1, column=6, columnspan=2, padx=20, pady=20, sticky="w")
         self.displayBox3.insert("0.0", "UDP-Stream nicht gestartet - Bitte lassen Sie den Durchschnitt berechnen")
 
-        def forward(self):
-            frame2.ctkraise()
+        self.frame1.tkraise()
+
+    def forward(self):
+        self.frame1.destroy()
+        self.frame2.tkraise()
 
 
 
     def slider_event(self, value):
-        self.label = ctk.CTkLabel(self, text=value)
+        self.label = ctk.CTkLabel(self.frame1, text=value)
         self.label.grid(row=4, column=4, columnspan=2, padx=20, pady=20, sticky="w")
 
 
@@ -232,12 +234,6 @@ class App(ctk.CTk):
                 "Zeitstempel": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
                 "Zufallsnummer": random.randint(1000, 9999)
         }       
-
-
-
- 
-        
-
         return text
     
     # Validierung der Benutzereingaben
