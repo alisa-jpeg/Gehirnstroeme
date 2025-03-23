@@ -175,7 +175,7 @@ class App(ctk.CTk):
 
         #schließen des fensters
         self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Schließen", command = self.quit)
-        self.generateResultsButton.grid(row=7, column = 0, columnspan = 10, padx = 20, pady=20, sticky ="ew")       
+        self.generateResultsButton.grid(row=8, column = 0, columnspan = 10, padx = 20, pady=20, sticky ="ew")       
 
         self.frame1.tkraise()
 
@@ -312,7 +312,7 @@ class App(ctk.CTk):
 
     def spiel_beginnen(self):
         self.label = ctk.CTkLabel(self.frame2, text="3...")
-        self.label.grid(row=8, column=0, columnspan=2, padx=20, pady=20, sticky="w")
+        self.label.grid(row=7, column=0, columnspan=2, padx=20, pady=20, sticky="w")
         self.after(1000, self.update_label, "2...")
     
     def update_label(self, text):
