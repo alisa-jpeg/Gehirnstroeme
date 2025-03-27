@@ -395,7 +395,7 @@ class App(ctk.CTk):
                         #Prüfen ob Ballon außerhalb des Spielfeldes ist
                         if y > 700 or y < 50:    #Falls aus sichtbaren Bereich fliegt-Abbruch
                             window.blit(background, (0, 0))
-                            ballon=pygame.transform.scale(zerplatzt,(200,400)) #ballon ersetzen durch zerplatzten ballon
+                            ballon=pygame.transform.scale(zerplatzt,(100,200)) #ballon ersetzen durch zerplatzten ballon
                             window.blit(ballon,(360, int(y)))
                             pygame.display.update()
                             time.sleep(2) #5 Sekunden warten
