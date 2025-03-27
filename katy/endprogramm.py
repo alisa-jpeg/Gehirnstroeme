@@ -165,7 +165,7 @@ class App(ctk.CTk):
         self.displayBox2.grid(row=6, column=4, columnspan=3, padx=20, pady=20, sticky="w")
 
         #erstellt button2
-        self.startGameButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", state = "disabled" command = self.spiel_beginnen)
+        self.startGameButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", state = "disabled", command = self.spiel_beginnen)
         self.startGameButton.grid(row=6, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt textfeld, damit man sieht ob udp-stream läuft
@@ -354,7 +354,7 @@ class App(ctk.CTk):
                 clock = pygame.time.Clock() #Pygame-Uhr zur Steuerung der FPS (Frames per Second) um die Bildwiedergabe zu kontrollieren
 
                 #Hintergrund laden und auf die Fenstergröße skalieren
-                background = pygame.image.load("Hintergrundbild.png")
+                background = pygame.image.load("/Users/Sophie/Documents/GitHub/Gehirnstroeme/Hintergrundbild.png")
                 ballon = pygame.image.load("ballon.png")
                 zerplatzt = pygame.image.load("zerplatzt.png")
 
@@ -394,7 +394,8 @@ class App(ctk.CTk):
 
                         #Prüfen ob Ballon außerhalb des Spielfeldes ist
                         if y > 700 or y < 50:    #Falls aus sichtbaren Bereich fliegt-Abbruch
-                            ballon=pygame.transform.scale(zerplatzt,(100,200)) #ballon ersetzen durch zerplatzten ballon
+                            window.blit(background, (0, 0))
+                            ballon=pygame.transform.scale(zerplatzt,(200,400)) #ballon ersetzen durch zerplatzten ballon
                             window.blit(ballon,(360, int(y)))
                             pygame.display.update()
                             time.sleep(2) #5 Sekunden warten
