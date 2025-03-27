@@ -136,8 +136,8 @@ class App(ctk.CTk):
 
 
 #button zum schreiben der daten in ein dokument
-        self.generateResultsButton = ctk.CTkButton(self.frame1, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.abschluss)
-        self.generateResultsButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")       
+        self.saveDataButton = ctk.CTkButton(self.frame1, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.abschluss)
+        self.saveDataButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")       
         
          # Button für die Option keine Daten zu speichern (nur Anschauungszwecke)
         self.showOnlyButton = ctk.CTkButton(self.frame1, text="Daten nicht speichern (nur zu Anschauungszwecken)", command=self.show_only)
@@ -153,8 +153,8 @@ class App(ctk.CTk):
         self.label = ctk.CTkLabel(self.frame2, text="Spielanleitung: \n\nIn diesem Spiel steuern Sie einen Ballon, indem Sie Ihre Gehirnaktivität (Alpha-Wellen), die von dem EEG gemessen wird, verwenden. \n\n Je mehr Alpha-Wellen das EEG empfängt, desto entspannter sind Sie, einfach gesagt. \n\nIhr Ziel ist es, den Ballon in der Luft zu halten, indem Sie Ihre Alpha-Wellen steuern, indem Sie sich entspannen oder nicht. \n\nWenn Ihr Alpha-Wert über dem Durchschnitt liegt, Sie also sehr entspannt sind, steigt der Ballon. Wenn er darunter liegt, Sie also sehr aufgeregt sind, sinkt der Ballon. \n\nDas Spiel dauert 60 Sekunden. Viel Spaß!")
         self.label.grid(row=0, column=0, columnspan=10, padx=20, pady=20, sticky="w")
 
-        self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
-        self.generateResultsButton.grid(row=5, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
+        self.generateAverageButton = ctk.CTkButton(self.frame2, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
+        self.generateAverageButton.grid(row=5, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt text box 1 um average_alpha anzuzeigen
         self.displayBox1 = ctk.CTkTextbox(self.frame2, width=300, height=25)
@@ -165,8 +165,8 @@ class App(ctk.CTk):
         self.displayBox2.grid(row=6, column=4, columnspan=3, padx=20, pady=20, sticky="w")
 
         #erstellt button2
-        self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", command = self.spiel_beginnen)
-        self.generateResultsButton.grid(row=6, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
+        self.startGameButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", state = "disabled" command = self.spiel_beginnen)
+        self.startGameButton.grid(row=6, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt textfeld, damit man sieht ob udp-stream läuft
         self.displayBox3 = ctk.CTkTextbox(self.frame2, width=500, height=25)
@@ -174,8 +174,8 @@ class App(ctk.CTk):
         self.displayBox3.insert("0.0", "UDP-Stream nicht gestartet - Bitte lassen Sie den Durchschnitt berechnen")
 
         #schließen des fensters
-        self.generateResultsButton = ctk.CTkButton(self.frame2, text = "Schließen", command = self.quit)
-        self.generateResultsButton.grid(row=8, column = 0, columnspan = 10, padx = 20, pady=20, sticky ="ew")       
+        self.closeButton = ctk.CTkButton(self.frame2, text = "Schließen", command = self.quit)
+        self.closeButton.grid(row=8, column = 0, columnspan = 10, padx = 20, pady=20, sticky ="ew")       
 
         self.frame1.tkraise()
 
@@ -301,6 +301,7 @@ class App(ctk.CTk):
         self.displayBox3.delete("0.0", "end")
         self.displayBox3.insert("0.0", "UDP-Stream läuft - Bitte warten Sie einen Moment")
         threading.Thread(target=self.alpha_anzeigen).start()
+        
 
     def alpha_anzeigen(self):
         self.alpha_average = calculate_average_alpha()
@@ -308,6 +309,7 @@ class App(ctk.CTk):
         self.displayBox1.insert("0.0", self.alpha_average)
         self.displayBox3.delete("0.0", "end")
         self.displayBox3.insert("0.0", "UDP-Stream ist abgeschlossen - Das Spiel kann beginnen!")
+        self.startGameButton.configure(state = "normal")
 
 
     def spiel_beginnen(self):
