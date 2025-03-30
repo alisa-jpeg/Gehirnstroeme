@@ -1,8 +1,6 @@
 muss noch gemacht werden:
 
--dokument soll am ende geschrieben werden, mit erfolg-variable
 
--spiel beginnen ausgrauen wenn durchschnitt wieder gestartet wird
 
 root window is main window
 

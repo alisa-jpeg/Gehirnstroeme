@@ -297,6 +297,7 @@ class App(ctk.CTk):
 
 
     def durchschnitt_berechnen(self):
+        self.startGameButton.configure(state = "disabled")        
         self.displayBox3.delete("0.0", "end")
         self.displayBox3.insert("0.0", "UDP-Stream läuft - Bitte warten Sie einen Moment")
         threading.Thread(target=self.alpha_anzeigen).start()
