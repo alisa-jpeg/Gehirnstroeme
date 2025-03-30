@@ -93,24 +93,24 @@ class App(ctk.CTk):
         #größe fenster auf das was zuvor festgelegt wurde
                 self.geometry(f"{appWidth}x{appHeight}")
         #erstellt button1
-                self.generateResultsButton = ctk.CTkButton(self, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
+                self.generateResultsButton = ctk.CTkButton(text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
                 self.generateResultsButton.grid(row=1, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt text box 1 um average_alpha anzuzeigen
-                self.displayBox1 = ctk.CTkTextbox(self, width=300, height=25)
+                self.displayBox1 = ctk.CTkTextbox(width=300, height=25)
                 self.displayBox1.grid(row=1, column=4, columnspan=2, padx=20, pady=20, sticky="w")
 
         #erstellt text box 2 um endergebnis anzuzeigen
-                self.displayBox2 = ctk.CTkTextbox(self, width=700, height=25)
+                self.displayBox2 = ctk.CTkTextbox(width=700, height=25)
                 self.displayBox2.grid(row=3, column=4, columnspan=3, padx=20, pady=20, sticky="w")
 
 
         #erstellt button2
-                self.generateResultsButton = ctk.CTkButton(self, text = "Spiel beginnen", command = self.spiel_beginnen)
+                self.generateResultsButton = ctk.CTkButton(text = "Spiel beginnen", command = self.spiel_beginnen)
                 self.generateResultsButton.grid(row=3, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt textfeld, damit man sieht ob udp-stream läuft
-                self.displayBox3 = ctk.CTkTextbox(self, width=500, height=25)
+                self.displayBox3 = ctk.CTkTextbox(width=500, height=25)
                 self.displayBox3.grid(row=1, column=6, columnspan=2, padx=20, pady=20, sticky="w")
                 self.displayBox3.insert("0.0", "UDP-Stream nicht gestartet - Bitte lassen Sie den Durchschnitt berechnen")
 

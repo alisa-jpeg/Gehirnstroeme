@@ -58,9 +58,6 @@ class App(ctk.CTk):
 #größe fenster auf das was zuvor festgelegt wurde
         self.geometry(f"{appWidth}x{appHeight}")
 
-        #wenn fenster geschlossen wird, danna auch das geamte programm
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
-
         # Initialisieren der Flagge für "Daten nicht speichern"
         self.show_only_flag = False
 
@@ -249,25 +246,13 @@ class App(ctk.CTk):
         daten_speichern(dateiname, daten)
         msgbox.showinfo("Erfolg", "Die Daten wurden erfolgreich gespeichert.")
         self.open_toplevel()
-    
-    def open_toplevel(self):
-            if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-                self.toplevel_window = ToplevelWindow(self) #Toplevelwindow-fenster erstellen wenn es noch nicht existiert
-                self.toplevel_window.grab_set() #fokus auf das Toplevelwindow-fenster setzen
-                self.toplevel_window.protocol("WM_DELETE_WINDOW", self.on_closing) # Protokoll für das Schließen des Toplevel-Fensters festlegen
-
-    def on_closing(self):
-        if self.toplevel_window is not None:
-            self.toplevel_window.destroy()
-        self.destroy()
-        self.quit()
 
     # Wenn der Benutzer nur zu Anschauungszwecken arbeitet (keine Speicherung)
     def show_only(self):
         self.show_only_flag = True
         msgbox.showinfo("Nur zur Ansicht", "Keine Daten werden gespeichert. Dies dient nur der Anschauung.")
         self.show_only_flag = False
-        self.open_toplevel()
+
 
 
 # Funktion zur Berechnung des Durchschnitts der Alpha-Werte
