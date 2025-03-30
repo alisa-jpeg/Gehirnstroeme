@@ -19,15 +19,15 @@ MAX_PACKETS = 1000  # Die maximale Anzahl von Paketen, die verarbeitet werden
 
 root = ctk.CTk()
 
-erfolg = ""
+success = ""
 alpha_value = 0
 
-def daten_speichern(dateiname, daten):
-    with open(dateiname, mode='a', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=daten.keys())
+def safe_data(filename, data):
+    with open(filename, mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=data.keys())
         if file.tell() == 0:
             writer.writeheader()
-        writer.writerow(daten)
+        writer.writerow(data)
     
 
 #farbe der widgets (green, dark-blue, blue)
@@ -136,7 +136,7 @@ class App(ctk.CTk):
 
 
 #button zum schreiben der daten in ein dokument
-        self.saveDataButton = ctk.CTkButton(self.frame1, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.abschluss)
+        self.saveDataButton = ctk.CTkButton(self.frame1, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.endframe)
         self.saveDataButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")       
         
          # Button für die Option keine Daten zu speichern (nur Anschauungszwecke)
@@ -153,7 +153,7 @@ class App(ctk.CTk):
         self.label = ctk.CTkLabel(self.frame2, text="Spielanleitung: \n\nIn diesem Spiel steuern Sie einen Ballon, indem Sie Ihre Gehirnaktivität (Alpha-Wellen), die von dem EEG gemessen wird, verwenden. \n\n Je mehr Alpha-Wellen das EEG empfängt, desto entspannter sind Sie, einfach gesagt. \n\nIhr Ziel ist es, den Ballon in der Luft zu halten, indem Sie Ihre Alpha-Wellen steuern, indem Sie sich entspannen oder nicht. \n\nWenn Ihr Alpha-Wert über dem Durchschnitt liegt, Sie also sehr entspannt sind, steigt der Ballon. Wenn er darunter liegt, Sie also sehr aufgeregt sind, sinkt der Ballon. \n\nDas Spiel dauert 60 Sekunden. Viel Spaß!")
         self.label.grid(row=0, column=0, columnspan=10, padx=20, pady=20, sticky="w")
 
-        self.generateAverageButton = ctk.CTkButton(self.frame2, text = "Durchschnitt berechnen", command = self.durchschnitt_berechnen) 
+        self.generateAverageButton = ctk.CTkButton(self.frame2, text = "Durchschnitt berechnen", command = self.threading_average_alpha) 
         self.generateAverageButton.grid(row=5, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt text box 1 um average_alpha anzuzeigen
@@ -275,12 +275,12 @@ class App(ctk.CTk):
 
         return True
     
-    def abschluss(self):
+    def endframe(self):
         if not self.validate_inputs():
             return
         print("wir sind im abschluss")
-        self.dateiname = "versuchsdaten.csv"
-        self.daten = self.createText()
+        self.filename = "versuchsdaten.csv"
+        self.data = self.createText()
         msgbox.showinfo("Erfolg", "Die Daten wurden erfolgreich gespeichert.")
         self.forward()
     
@@ -292,18 +292,14 @@ class App(ctk.CTk):
         self.show_only_flag = False
         self.forward()
 
-
-
-
-
-    def durchschnitt_berechnen(self):
+    def threading_average_alpha(self):
         self.startGameButton.configure(state = "disabled")        
         self.displayBox3.delete("0.0", "end")
         self.displayBox3.insert("0.0", "UDP-Stream läuft - Bitte warten Sie einen Moment")
-        threading.Thread(target=self.alpha_anzeigen).start()
+        threading.Thread(target=self.show_alpha).start()
         
 
-    def alpha_anzeigen(self):
+    def show_alpha(self):
         self.alpha_average = calculate_average_alpha()
         self.displayBox1.delete("0.0", "end")
         self.displayBox1.insert("0.0", self.alpha_average)
@@ -328,17 +324,17 @@ class App(ctk.CTk):
 
     def start_game(self):
         self.displayBox2.delete("0.0", "end")
-        erfolg = self.ballon_bewegen()
-        text = erfolg
+        success = self.move_ballon()
+        text = success
         self.displayBox2.insert("0.0", text)
         self.label.configure(text="")
 
-        self.daten["Erfolg"] = erfolg
-        daten_speichern(self.dateiname, self.daten)
+        self.data["Erfolg"] = success
+        safe_data(self.filename, self.data)
 
 
 
-    def ballon_bewegen(self): 
+    def move_ballon(self): 
         #Variablen für die Ballpostion und Geschwindigkeit festlegen
                 y = 350
                 speed = 5
@@ -359,7 +355,7 @@ class App(ctk.CTk):
                 #Hintergrund laden und auf die Fenstergröße skalieren
                 background = pygame.image.load("Hintergrundbild.png")
                 ballon = pygame.image.load("ballon.png")
-                zerplatzt = pygame.image.load("zerplatzt.png")
+                burst = pygame.image.load("zerplatzt.png")
 
                 background=pygame.transform.scale(background,(window_width,window_height))
                 window.blit(background,(0,0))
@@ -398,7 +394,7 @@ class App(ctk.CTk):
                         #Prüfen ob Ballon außerhalb des Spielfeldes ist
                         if y > 700 or y < 50:    #Falls aus sichtbaren Bereich fliegt-Abbruch
                             window.blit(background, (0, 0))
-                            ballon=pygame.transform.scale(zerplatzt,(100,200)) #ballon ersetzen durch zerplatzten ballon
+                            ballon=pygame.transform.scale(burst,(100,200)) #ballon ersetzen durch zerplatzten ballon
                             window.blit(ballon,(360, int(y)))
                             pygame.display.update()
                             time.sleep(2) #5 Sekunden warten
