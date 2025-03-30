@@ -279,9 +279,8 @@ class App(ctk.CTk):
         if not self.validate_inputs():
             return
         print("wir sind im abschluss")
-        dateiname = "versuchsdaten.csv"
-        daten = self.createText()
-        daten_speichern(dateiname, daten)
+        self.dateiname = "versuchsdaten.csv"
+        self.daten = self.createText()
         msgbox.showinfo("Erfolg", "Die Daten wurden erfolgreich gespeichert.")
         self.forward()
     
@@ -333,6 +332,9 @@ class App(ctk.CTk):
         self.displayBox2.insert("0.0", text)
         self.label.configure(text="")
 
+        self.daten["Erfolg"] = erfolg
+        daten_speichern(self.dateiname, self.daten)
+
 
 
     def ballon_bewegen(self): 
@@ -354,7 +356,7 @@ class App(ctk.CTk):
                 clock = pygame.time.Clock() #Pygame-Uhr zur Steuerung der FPS (Frames per Second) um die Bildwiedergabe zu kontrollieren
 
                 #Hintergrund laden und auf die Fenstergröße skalieren
-                background = pygame.image.load("/Users/Sophie/Documents/GitHub/Gehirnstroeme/Hintergrundbild.png")
+                background = pygame.image.load("Hintergrundbild.png")
                 ballon = pygame.image.load("ballon.png")
                 zerplatzt = pygame.image.load("zerplatzt.png")
 
@@ -425,6 +427,8 @@ class App(ctk.CTk):
                     return "Spiel abgebrochen! Das Fenster wurde geschlossen."
                 else:
                     return "Spiel beendet - Ballon erfolgreich gesteuert."
+                
+
 
 
 
