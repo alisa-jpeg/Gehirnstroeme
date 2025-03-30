@@ -1,6 +1,6 @@
 
 import pygame
-from durchschnitt_berechnen import calculate_average_alpha
+from alt_nutzlos.durchschnitt_berechnen import calculate_average_alpha
 
 def ballon_bewegen():	
 	base_y = 20 #Startposition des Ballons

@@ -8,8 +8,8 @@ import socket
 #importieren und initialisieren von pygame
 import pygame
 
-from durchschnitt_berechnen import calculate_average_alpha
-from Luftballom_steigt_sinkt_alt import steigen
+from alt_nutzlos.durchschnitt_berechnen import calculate_average_alpha
+from alt_nutzlos.Luftballom_steigt_sinkt_alt import steigen
 
 pygame.init()
 

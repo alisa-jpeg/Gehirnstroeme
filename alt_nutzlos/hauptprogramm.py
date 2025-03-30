@@ -7,9 +7,9 @@
 import customtkinter as ctk #für graphiken 
 
 #funktionen importieren
-from durchschnitt_berechnen import calculate_average_alpha
-from konsoleneingabe import konsoleneingabe
-from pygame_kreis import ballon_bewegen
+from alt_nutzlos.durchschnitt_berechnen import calculate_average_alpha
+from alt_nutzlos.konsoleneingabe import konsoleneingabe
+from alt_nutzlos.pygame_kreis import ballon_bewegen
 
 
 #beginn hauptprogramm
