@@ -1,0 +1,43 @@
+import socket
+import json
+import time
+
+def calculate_average_alpha():
+    # Erstellt einen UDP-Socket für die Kommunikation über IPv4 und das verbindungslose UDP-Protokoll
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    # Bindet den Socket an eine spezifische IP-Adresse und einen Port, um Datenpakete zu empfangen
+    udp_socket.bind((HOST, PORT))
+
+    # Speichert die empfangenen Alpha-Werte zur späteren Berechnung des Durchschnitts
+    alpha_values = []
+
+    # Startzeit der Empfangsschleife
+    start_time = time.time()
+
+    # Empfängt Daten, bis die maximale Dauer oder Anzahl an Paketen erreicht ist
+    while time.time() - start_time < DURATION and len(alpha_values) < MAX_PACKETS:
+        try:
+            # Wartet auf ein eingehendes UDP-Paket und speichert die empfangenen Daten
+            data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+            
+            # Dekodiert die JSON-Daten aus dem empfangenen Paket
+            message = json.loads(data.decode('utf-8'))
+
+            # Prüft, ob die Struktur des Pakets korrekt ist
+            if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
+                # Speichert den dritten Wert aus der "data"-Liste
+                alpha_values.append(message["data"][2])
+            else:
+                print("Ungültiges Paket erhalten:", message)  # Ausgabe für fehlerhafte Pakete
+
+        except json.JSONDecodeError:
+            print("Fehler beim Dekodieren des JSON-Pakets.")  # Fehlerausgabe bei fehlerhaftem JSON
+        except Exception as e:
+            print(f"Unerwarteter Fehler: {e}")  # Allgemeine Fehlerbehandlung
+
+    # Schließt den UDP-Socket nach Beendigung der Empfangsschleife
+    udp_socket.close()
+
+    # Berechnet und gibt den Durchschnitt der gesammelten Alpha-Werte zurück (0, falls keine Werte empfangen wurden)
+    return sum(alpha_values) / len(alpha_values) if alpha_values else 0
