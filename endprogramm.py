@@ -21,13 +21,6 @@ root = ctk.CTk()
 
 success = ""
 alpha_value = 0
-
-def safe_data(filename, data):
-    with open(filename, mode='a', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=data.keys())
-        if file.tell() == 0:
-            writer.writeheader()
-        writer.writerow(data)
     
 
 #farbe der widgets (green, dark-blue, blue)
@@ -52,11 +45,15 @@ class App(ctk.CTk):
         super().__init__(*args, **kwargs)
 
         self.frame_list = [] #Liste für die Frames
+        self.data = {} #Daten-Variable für die Speicherung der Daten
+        self.filename = "versuchsdaten.csv" #Dateiname für die Speicherung der Daten
 
 #titel fenster
         self.title("Brain-Computer-Interface-Fragebogen") 
-#größe fenster auf das was zuvor festgelegt wurde
-        self.geometry(f"{appWidth}x{appHeight}")
+        self.geometry(f"{appWidth}x{appHeight}") #größe fenster auf das was zuvor festgelegt wurde
+
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing) #behandlung des schließen des fensters
 
 
         # Initialisieren der Flagge für "Daten nicht speichern"
@@ -136,7 +133,7 @@ class App(ctk.CTk):
 
 
 #button zum schreiben der daten in ein dokument
-        self.saveDataButton = ctk.CTkButton(self.frame1, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.endframe)
+        self.saveDataButton = ctk.CTkButton(self.frame1, text ="Daten speichern (damit stimmen Sie den Datenschutzrichtlinien zu)", command =self.end_frame)
         self.saveDataButton.grid(row=7, column = 0, columnspan = 2, padx = 20, pady=20, sticky ="ew")       
         
          # Button für die Option keine Daten zu speichern (nur Anschauungszwecke)
@@ -165,7 +162,7 @@ class App(ctk.CTk):
         self.displayBox2.grid(row=6, column=4, columnspan=3, padx=20, pady=20, sticky="w")
 
         #erstellt button2
-        self.startGameButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", state = "disabled", command = self.spiel_beginnen)
+        self.startGameButton = ctk.CTkButton(self.frame2, text = "Spiel beginnen", state = "disabled", command = self.start_countdown)
         self.startGameButton.grid(row=6, column = 1, columnspan = 2, padx = 20, pady=20, sticky ="w")
 
         #erstellt textfeld, damit man sieht ob udp-stream läuft
@@ -179,6 +176,13 @@ class App(ctk.CTk):
 
         self.frame1.tkraise()
 
+    def on_closing(self):
+        #Beendet das Programm, wenn das Fenster geschlossen wird.
+        self.quit()  # Beendet die tkinter-Schleife
+        self.destroy()  # Zerstört das Fenster
+        pygame.quit()  # Beendet pygame, falls es läuft
+        exit(0)  # Beendet das gesamte Programm
+
     def forward(self):
         self.frame1.destroy()
         self.frame2.tkraise()
@@ -191,7 +195,7 @@ class App(ctk.CTk):
 
 
 
-    def createText(self):
+    def create_textt(self):
         #.cget("value") gibt den wert des eingabefeldes zurück
         v0 = radio_var0.get()
         v1 = radio_var1.get()
@@ -236,6 +240,7 @@ class App(ctk.CTk):
                 "Händigkeit": haendigkeit, 
                 "Müdigkeit": self.slider.get(), 
                 "Haarlänge": haar, 
+                "Erfolg": "",
                 "Zeitstempel": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
                 "Zufallsnummer": random.randint(1000, 9999)
         }       
@@ -275,12 +280,10 @@ class App(ctk.CTk):
 
         return True
     
-    def endframe(self):
+    def end_frame(self):
         if not self.validate_inputs():
             return
-        print("wir sind im abschluss")
-        self.filename = "versuchsdaten.csv"
-        self.data = self.createText()
+        self.data = self.create_textt()
         msgbox.showinfo("Erfolg", "Die Daten wurden erfolgreich gespeichert.")
         self.forward()
     
@@ -297,7 +300,6 @@ class App(ctk.CTk):
         self.displayBox3.delete("0.0", "end")
         self.displayBox3.insert("0.0", "UDP-Stream läuft - Bitte warten Sie einen Moment")
         threading.Thread(target=self.show_alpha).start()
-        
 
     def show_alpha(self):
         self.alpha_average = calculate_average_alpha()
@@ -308,127 +310,142 @@ class App(ctk.CTk):
         self.startGameButton.configure(state = "normal")
 
 
-    def spiel_beginnen(self):
+    def start_countdown(self):
         self.label = ctk.CTkLabel(self.frame2, text="3...")
         self.label.grid(row=7, column=0, columnspan=2, padx=20, pady=20, sticky="w")
-        self.after(1000, self.update_label, "2...")
-    
+        self.after(1000, lambda: self.update_label("2..."))
+        self.after(2000, lambda: self.update_label("1..."))
+        self.after(3000, lambda: self.update_label("Los!"))
+        self.after(4000, self.run_game)
+
+
     def update_label(self, text):
         self.label.configure(text=text)
-        if text == "2...":
-            self.after(1000, self.update_label, "1...")
-        elif text == "1...":
-            self.after(1000, self.update_label, "Los!")
-        elif text == "Los!":
-            self.after(1000, self.start_game)
-
-    def start_game(self):
-        self.displayBox2.delete("0.0", "end")
-        success = self.move_ballon()
-        text = success
-        self.displayBox2.insert("0.0", text)
-        self.label.configure(text="")
-
-        self.data["Erfolg"] = success
-        safe_data(self.filename, self.data)
 
 
+    def run_game(self):
+        self.label.configure(text = "") #Label zurücksetzen
+        self.label.grid_forget() #Label ausblenden
 
-    def move_ballon(self): 
+        # CustomTkinter-Fenster deaktivieren
+        self.attributes("-disabled", True)
+
+
         #Variablen für die Ballpostion und Geschwindigkeit festlegen
-                y = 350
-                speed = 5
+        y = 350
+        speed = 5
         #UDP socket für den Empfang von Alpha-Werten einrichten
-                udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                udp_socket.bind((HOST, PORT))
+        udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        udp_socket.bind((HOST, PORT))
         
-                alpha_values = [] #Liste zur Speicherung der empfangegen Alpha-Werte
-                start_time = time.time() #Startzeit des Spiels speichern
+        alpha_values = [] #Liste zur Speicherung der empfangegen Alpha-Werte
+        start_time = time.time() #Startzeit des Spiels speichern
 
-                #pygame initialisieren
-                pygame.init()
-                window_width, window_height = 825, 800 #Fenstergröße definieren
-                window = pygame.display.set_mode((window_width, window_height)) #Fenster erstellen
+        #pygame initialisieren
+        pygame.init()
+        window_width, window_height = 825, 800 #Fenstergröße definieren
+        window = pygame.display.set_mode((window_width, window_height)) #Fenster erstellen
                
-                clock = pygame.time.Clock() #Pygame-Uhr zur Steuerung der FPS (Frames per Second) um die Bildwiedergabe zu kontrollieren
+        clock = pygame.time.Clock() #Pygame-Uhr zur Steuerung der FPS (Frames per Second) um die Bildwiedergabe zu kontrollieren
 
-                #Hintergrund laden und auf die Fenstergröße skalieren
-                background = pygame.image.load("Hintergrundbild.png")
-                ballon = pygame.image.load("ballon.png")
-                burst = pygame.image.load("zerplatzt.png")
+        #Hintergrund laden und auf die Fenstergröße skalieren
+        background = pygame.image.load("Hintergrundbild.png")
+        ballon = pygame.image.load("ballon.png")
+        burst = pygame.image.load("zerplatzt.png")
 
-                background=pygame.transform.scale(background,(window_width,window_height))
-                window.blit(background,(0,0))
+        background=pygame.transform.scale(background,(window_width,window_height))
+        window.blit(background,(0,0))
         
-                #Ballonbild laden und skalieren
-                ballon=pygame.transform.scale(ballon,(100,200))
-                window.blit(ballon,(360, int(y)))
+        #Ballonbild laden und skalieren
+        ballon=pygame.transform.scale(ballon,(100,200))
+        window.blit(ballon,(360, int(y)))
 
-                #Spielschleife läuft 
-                running = True
-                game_aborted = False
-                while running:
-                    #Verarbeitung von Benutzereingaben
-                    for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                game_aborted = True
-                                running = False
-                    #udp stream starten, solange spiel läuft und genug pakete empfangen wurden 
-                    if time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
-                        try:
-                            #ALpha-Wert über UDP empfangen
-                            data, _ = udp_socket.recvfrom(BUFFER_SIZE)
-                            message = json.loads(data.decode('utf-8'))
+        #Spielschleife läuft 
+        running = True
+        game_aborted = False
+        while running:
+            #Verarbeitung von Benutzereingaben
+            for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        game_aborted = True
+                        running = False
 
-                            #Prüfen ob das empfangene Paket gültig ist und die Daten enthält
-                            if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
-                                self.alpha_value = (message["data"][2]) #Wert aus Liste speichern
-                                alpha_values.append(message["data"][2]) #Wert zur Liste hinzufügen
+            #udp stream starten, solange spiel läuft und genug pakete empfangen wurden 
+            if time.time() - start_time < DURATION_GAME and len(alpha_values) < MAX_PACKETS: 
+                try:
+                    #ALpha-Wert über UDP empfangen
+                    data, _ = udp_socket.recvfrom(BUFFER_SIZE)
+                    message = json.loads(data.decode('utf-8'))
 
-                        except json.JSONDecodeError:
-                            print("Fehler beim Dekodieren des JSON-Pakets.") #Falls JSON fehlerhaft ist
+                    #Prüfen ob das empfangene Paket gültig ist und die Daten enthält
+                    if "data" in message and isinstance(message["data"], list) and len(message["data"]) > 2:
+                        self.alpha_value = (message["data"][2]) #Wert aus Liste speichern
+                        alpha_values.append(message["data"][2]) #Wert zur Liste hinzufügen
+
+                except json.JSONDecodeError:
+                    print("Fehler beim Dekodieren des JSON-Pakets.") #Falls JSON fehlerhaft ist
                                     
-                        except Exception as e:
-                            print(f"Unerwarteter Fehler: {e}") #allgemeiner fehlerfall
+                except Exception as e:
+                    print(f"Unerwarteter Fehler: {e}") #allgemeiner fehlerfall
 
-                        #Prüfen ob Ballon außerhalb des Spielfeldes ist
-                        if y > 700 or y < 50:    #Falls aus sichtbaren Bereich fliegt-Abbruch
-                            window.blit(background, (0, 0))
-                            ballon=pygame.transform.scale(burst,(100,200)) #ballon ersetzen durch zerplatzten ballon
-                            window.blit(ballon,(360, int(y)))
-                            pygame.display.update()
-                            time.sleep(2) #5 Sekunden warten
-                            pygame.quit()
-                            return "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang."
+                #Prüfen ob Ballon außerhalb des Spielfeldes ist
+                if y > 700 or y < 50:    #Falls aus sichtbaren Bereich fliegt-Abbruch
+                    window.blit(background, (0, 0))
+                    ballon=pygame.transform.scale(burst,(100,200)) #ballon ersetzen durch zerplatzten ballon
+                    window.blit(ballon,(360, int(y)))
+                    pygame.display.update()
+                    time.sleep(2) #5 Sekunden warten
+                    pygame.quit()
+                    success = "Spiel abgebrochen! Alpha-Wert über- oder unterschreitet das kritische Limit für zu lang." 
+                    self.displayBox2.delete("0.0", "end")
+                    self.displayBox2.insert("0.0", success)
+                    break
                                
-                        #Ballon Bewegung basierend auf Alpha-Wert
-                        if self.alpha_value > self.alpha_average: #Wenn Alpha-Wert größer als Durchschnitt ist
-                            y -= speed  # Ballon steigt
+                #Ballon Bewegung basierend auf Alpha-Wert
+                if self.alpha_value > self.alpha_average: #Wenn Alpha-Wert größer als Durchschnitt ist
+                    y -= speed  # Ballon steigt
 
-                        if self.alpha_value < self.alpha_average: #Wenn Alpha-Wert kleiner als Durchschnitt ist
-                            y += speed #Ballon sinkt
+                if self.alpha_value < self.alpha_average: #Wenn Alpha-Wert kleiner als Durchschnitt ist
+                    y += speed #Ballon sinkt
 
-                        # Hintergrund und Ballon neu zeichnen
-                        window.blit(background, (0, 0))
-                        window.blit(ballon, (360, int(y)))
+                # Hintergrund und Ballon neu zeichnen
+                window.blit(background, (0, 0))
+                window.blit(ballon, (360, int(y)))
+                pygame.display.update() #Anzeige aktualisieren
+                clock.tick(60)  # Spielgeschwindigkeit auf 60 FPS begrenzen
 
-                        pygame.display.update() #Anzeige aktualisieren
-                        clock.tick(60)  # Spielgeschwindigkeit auf 60 FPS begrenzen
+            else:
+                running=False #Wenn Zeit abgelaufen ist oder genug Pakete empfangen wurden, Spiel beenden
 
-                    else:
-                        running=False #Wenn Zeit abgelaufen ist oder genug Pakete empfangen wurden, Spiel beenden
+        udp_socket.close()
+        pygame.quit()
 
-                udp_socket.close()
-                pygame.quit()
-                if game_aborted:
-                    return "Spiel abgebrochen! Das Fenster wurde geschlossen."
-                else:
-                    return "Spiel beendet - Ballon erfolgreich gesteuert."
-                
+        # CustomTkinter-Fenster wieder aktivieren
+        self.attributes("-disabled", False)
+        self.lift()  # Bringt das Fenster in den Vordergrund
+
+        if game_aborted:
+            success = "Spiel abgebrochen! Das Fenster wurde geschlossen."
+            self.displayBox2.delete("0.0", "end")
+            self.displayBox2.insert("0.0", success)
+        else:
+            success = "Spiel beendet - Ballon erfolgreich gesteuert!"
+            self.displayBox2.delete("0.0", "end")
+            self.displayBox2.insert("0.0", success)
+
+        self.data["Erfolg"] = success #Erfolg in die Daten einfügen
+        self.safe_data(self.filename, self.data)
 
 
+    def safe_data(self, filename, data):
+        if self.show_only_flag:
+            with open(filename, mode='a', newline='', encoding='utf-8') as file:
+                writer = csv.DictWriter(file, fieldnames=data.keys())
+                if file.tell() == 0:
+                    writer.writeheader()
+                writer.writerow(data)
 
-
+        
 # Funktion zur Berechnung des Durchschnitts der Alpha-Werte
 def calculate_average_alpha():
     # Erstelle einen UDP-Socket, um Daten zu empfangen.AF_INET bezeichnet hierbei Adress-Family-Inzternet” das bedeutet, dass wir einen IPv4-Socket erstellen (für IP-Adressen der Form XXX.XXX.X.X).
@@ -479,6 +496,7 @@ def calculate_average_alpha():
     #Berechnen des Durchschnitts der Alpha-Werte und wird zurückgegeben.
     # Falls keine Werte empfangen wurden, wird 0 zurückgegeben.
     return sum(alpha_values) / len(alpha_values) if alpha_values else 0
+
 
 
 #initiiert die app
