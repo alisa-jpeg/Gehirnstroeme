@@ -298,7 +298,7 @@ class App(ctk.CTk):
     def threading_average_alpha(self):
         self.startGameButton.configure(state = "disabled")        
         self.displayBox3.delete("0.0", "end")
-        self.displayBox3.insert("0.0", "UDP-Stream läuft - Bitte warten Sie einen Moment")
+        self.displayBox3.insert("0.0", "UDP-Stream ist am Laufen - Bitte warten Sie einen Moment")
         threading.Thread(target=self.show_alpha).start()
 
     def show_alpha(self):
