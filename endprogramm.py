@@ -24,10 +24,10 @@ alpha_value = 0
     
 
 #farbe der widgets (green, dark-blue, blue)
-ctk.set_default_color_theme("green")
+ctk.set_default_color_theme("blue")
 
 #farbe des fensters (Light, Dark, System)
-ctk.set_appearance_mode("Dark") 
+ctk.set_appearance_mode("Light") 
 
 #größe fenster
 appWidth= 1585
@@ -62,8 +62,9 @@ class App(ctk.CTk):
         self.frame1 = ctk.CTkFrame(self)
         self.frame2 = ctk.CTkFrame(self)
 
-        self.frame1.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
-        self.frame2.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
+        self.frame1.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        self.frame2.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+    
 
 
 #erstes label-überschrift
@@ -333,7 +334,7 @@ class App(ctk.CTk):
 
         #Variablen für die Ballpostion und Geschwindigkeit festlegen
         y = 350
-        speed = 5
+        speed = 1
         #UDP socket für den Empfang von Alpha-Werten einrichten
         udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         udp_socket.bind((HOST, PORT))
