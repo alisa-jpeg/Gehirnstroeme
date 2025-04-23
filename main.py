@@ -49,7 +49,7 @@ class App(ctk.CTk):
         self.filename = "versuchsdaten.csv" #Dateiname für die Speicherung der Daten
 
 #titel fenster
-        self.title("Brain-Computer-Interface-Fragebogen") 
+        self.title("Brain-Computer-Interface") 
         self.geometry(f"{appWidth}x{appHeight}") #größe fenster auf das was zuvor festgelegt wurde
 
 
